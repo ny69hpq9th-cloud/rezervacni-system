@@ -196,13 +196,14 @@ document.getElementById('btn-cancel-stripe')?.addEventListener('click', function
 });
 
 document.getElementById('btn-cancel-confirm')?.addEventListener('click', async function() {
+  const origText = this.textContent;
   this.disabled = true;
   this.textContent = '...';
   try {
     const res = await fetch('/api/stripe_cancel.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ csrf: document.querySelector('[name=csrf_token]')?.value || '' })
+      body: JSON.stringify({ csrf_token: document.querySelector('[name=csrf_token]')?.value || '' })
     });
     const data = await res.json();
     if (data.success) {
@@ -211,12 +212,12 @@ document.getElementById('btn-cancel-confirm')?.addEventListener('click', async f
     } else {
       alert(data.error || <?= json_encode(__('dash.cancel_err')) ?>);
       this.disabled = false;
-      this.textContent = <?= json_encode(__('dash.cancel_stripe')) ?>;
+      this.textContent = origText;
     }
   } catch(e) {
     alert(<?= json_encode(__('dash.cancel_err')) ?>);
     this.disabled = false;
-    this.textContent = <?= json_encode(__('dash.cancel_stripe')) ?>;
+    this.textContent = origText;
   }
 });
 </script>
