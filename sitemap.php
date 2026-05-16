@@ -4,7 +4,6 @@
  * Google Search Console: https://rezervly.eu/sitemap.php
  */
 header('Content-Type: application/xml; charset=utf-8');
-header('X-Robots-Tag: noindex'); // Samotná sitemap se neindexuje
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/db.php';
