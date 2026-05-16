@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /includes/
+Disallow: /lang/
+Disallow: /api/
+Disallow: /install.php
+Disallow: /seed.php
+Disallow: /logout.php
+
+Crawl-delay: 1
+
+Sitemap: https://rezervly.eu/sitemap.xml

@@ -1,0 +1,46 @@
+Options -Indexes
+
+# ── GZIP compression ─────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json text/xml image/svg+xml
+  AddOutputFilterByType DEFLATE font/woff2 application/font-woff2
+</IfModule>
+
+# ── Browser caching ──────────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType text/javascript         "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/gif               "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType font/woff2              "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+# ── Security headers ─────────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+RewriteEngine On
+
+# Redirect to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Clean booking URLs: /rezervace/slug -> /book.php?slug=slug
+RewriteRule ^rezervace/([a-z0-9-]+)/?$ book.php?slug=$1 [L,QSA]
+
+# Block direct access to includes and lang directories
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^lang/ - [F,L]

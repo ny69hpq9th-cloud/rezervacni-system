@@ -1,0 +1,24 @@
+# ── Citlivé soubory — NIKDY do gitu ──────────────────────────
+config.php
+.env
+*.env
+
+# ── PHP závislosti ────────────────────────────────────────────
+vendor/
+
+# ── Nahrané soubory uživatelů ─────────────────────────────────
+uploads/
+
+# ── Logy ─────────────────────────────────────────────────────
+*.log
+error_log
+
+# ── IDE / OS soubory ─────────────────────────────────────────
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Generátor SQL (citlivý — maže se po použití) ─────────────
+gensql.php
