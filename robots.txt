@@ -11,4 +11,4 @@ Disallow: /logout.php
 
 Crawl-delay: 1
 
-Sitemap: https://rezervly.eu/sitemap.xml
+Sitemap: https://rezervly.eu/sitemap.php
