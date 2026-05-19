@@ -92,12 +92,18 @@ foreach ($seoSchemas as $schema) {
         <a href="#jak-to-funguje"><?= __('nav.how_it_works') ?></a>
         <a href="#cenik"><?= __('nav.pricing') ?></a>
         <a href="#faq"><?= __('nav.faq') ?></a>
+        <div class="nav__mobile-cta">
+          <a href="/login.php" class="btn btn--ghost btn--sm" style="width:100%;justify-content:center"><?= __('nav.login') ?></a>
+          <a href="/register.php" class="btn btn--primary btn--sm" style="width:100%;justify-content:center"><?= __('nav.start_free') ?></a>
+        </div>
       </div>
       <div class="nav__cta">
         <?= langSwitcher() ?>
         <?= themeToggle() ?>
-        <a href="/login.php" class="btn btn--ghost btn--sm"><?= __('nav.login') ?></a>
-        <a href="/register.php" class="btn btn--primary btn--sm"><?= __('nav.start_free') ?></a>
+        <div class="nav__cta-btns">
+          <a href="/login.php" class="btn btn--ghost btn--sm"><?= __('nav.login') ?></a>
+          <a href="/register.php" class="btn btn--primary btn--sm"><?= __('nav.start_free') ?></a>
+        </div>
       </div>
       <button class="nav__toggle" id="nav-toggle" aria-label="Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>

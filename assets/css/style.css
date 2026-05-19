@@ -436,6 +436,10 @@ select.form-control { cursor: pointer; }
   .steps::before { display: none; }
 }
 
+/* Mobile CTA buttons inside dropdown — hidden on desktop */
+.nav__mobile-cta { display: none; }
+.nav__cta-btns { display: flex; align-items: center; gap: 8px; }
+
 @media (max-width: 640px) {
   .section { padding: 56px 0; }
   .hero { padding: 64px 0 48px; }
@@ -448,6 +452,9 @@ select.form-control { cursor: pointer; }
   .hero__stats { gap: 20px; flex-wrap: wrap; }
   .hero__actions { flex-direction: column; }
   .hero__actions .btn { width: 100%; }
+  /* Hide CTA buttons from nav bar, show only in dropdown */
+  .nav__cta-btns { display: none; }
+  .nav__mobile-cta { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
 }
 
 /* Mobile nav open */
