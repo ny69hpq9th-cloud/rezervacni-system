@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // This file is included by dashboard pages after they set:
 // $pageTitle, $activeNav
 // and after requiring config + auth + db + functions
@@ -45,7 +45,7 @@ function navIcon(string $icon): string {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/dashboard.css">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
