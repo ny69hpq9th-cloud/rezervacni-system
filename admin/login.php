@@ -30,6 +30,7 @@ $pname = PLATFORM_NAME;
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
+<?= themeHeadScript() ?>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin – <?= e(PLATFORM_TITLE) ?></title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
