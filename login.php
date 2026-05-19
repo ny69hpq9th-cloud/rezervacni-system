@@ -6,28 +6,61 @@ require_once __DIR__ . '/includes/functions.php';
 if (isLoggedIn()) redirect(PLATFORM_URL . '/dashboard/index.php');
 
 $error = '';
+$_debugInfo = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCsrf($_POST['csrf_token'] ?? '')) {
         $error = __('auth.err_token');
+        $_debugInfo[] = 'CSRF check FAILED';
     } else {
-        $email    = trim($_POST['email'] ?? '');
+        $_debugInfo[] = 'CSRF check OK';
+        $email    = strtolower(trim($_POST['email'] ?? ''));
         $password = $_POST['password'] ?? '';
-        $dnsOk    = true;
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $emailDomain = substr(strrchr($email, '@'), 1);
-            if (!checkdnsrr($emailDomain, 'MX') && !checkdnsrr($emailDomain, 'A')) {
-                $dnsOk = false;
-                $error = __('reg.err_email_dns');
-            }
-        }
-        if ($dnsOk) {
-            if (loginUser($email, $password)) {
-                redirect(PLATFORM_URL . '/dashboard/index.php');
+
+        // Debug: check what's in the DB for this email
+        try {
+            $db   = getDB();
+            $stmt = $db->prepare("SELECT id, email, status, plan, created_at, LENGTH(password) as pw_len FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $dbUser = $stmt->fetch();
+            if ($dbUser) {
+                $_debugInfo[] = "DB user found: id={$dbUser['id']}, status={$dbUser['status']}, plan={$dbUser['plan']}, pw_len={$dbUser['pw_len']}";
             } else {
-                $error = __('auth.err_credentials');
+                $_debugInfo[] = "DB user NOT found for email: {$email}";
             }
+        } catch (Exception $e) {
+            $_debugInfo[] = "DB error: " . $e->getMessage();
+        }
+
+        if (loginUser($email, $password)) {
+            redirect(PLATFORM_URL . '/dashboard/index.php');
+        } else {
+            // Extra debug: check user without status filter
+            try {
+                $stmt2 = $db->prepare("SELECT id, status, LENGTH(password) as pw_len FROM users WHERE email = ?");
+                $stmt2->execute([$email]);
+                $u2 = $stmt2->fetch();
+                if ($u2) {
+                    $_debugInfo[] = "Login failed — user exists, status='{$u2['status']}', pw_len={$u2['pw_len']}";
+                    // Test password_verify directly
+                    $stmt3 = $db->prepare("SELECT password FROM users WHERE email = ?");
+                    $stmt3->execute([$email]);
+                    $row = $stmt3->fetch();
+                    $pwOk = $row ? password_verify($password, $row['password']) : false;
+                    $_debugInfo[] = "password_verify result: " . ($pwOk ? 'TRUE' : 'FALSE');
+                } else {
+                    $_debugInfo[] = "Login failed — no user with this email at all";
+                }
+            } catch (Exception $e) {
+                $_debugInfo[] = "Debug query error: " . $e->getMessage();
+            }
+            $error = __('auth.err_credentials');
         }
     }
+}
+// Log debug info to PHP error log (always)
+if (!empty($_debugInfo)) {
+    error_log('[LOGIN DEBUG] ' . implode(' | ', $_debugInfo));
 }
 
 $pname = PLATFORM_NAME;
@@ -113,6 +146,12 @@ $flash = getFlash();
     </div>
   </div>
 </div>
+<?php if (!empty($_debugInfo)): ?>
+<div style="position:fixed;bottom:0;left:0;right:0;background:#1e1e1e;color:#a8ff78;font-family:monospace;font-size:11px;padding:8px 16px;z-index:9999;border-top:2px solid #333;max-height:160px;overflow-y:auto">
+  <strong style="color:#fff">LOGIN DEBUG:</strong><br>
+  <?= implode('<br>', array_map('htmlspecialchars', $_debugInfo)) ?>
+</div>
+<?php endif; ?>
 <script>
 function togglePw(btn) {
   var input = btn.closest('.pw-wrap').querySelector('input');
