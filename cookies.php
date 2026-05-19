@@ -1,15 +1,24 @@
 <?php
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/functions.php';
+
+$lang    = currentLang();
+$en      = $lang === 'en';
+$updated = date('j. n. Y');
 ?>
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cookie policy – Rezervly</title>
-<meta name="description" content="Informace o použití cookies na platformě Rezervly v souladu s GDPR.">
+<title><?= $en ? 'Cookie Policy' : 'Cookie policy' ?> – Rezervly</title>
+<meta name="description" content="<?= $en
+    ? 'Information about the use of cookies on the Rezervly platform in accordance with GDPR and the ePrivacy Directive.'
+    : 'Informace o použití cookies na platformě Rezervly v souladu s GDPR a směrnicí ePrivacy.' ?>">
 <meta name="robots" content="noindex">
+<link rel="canonical" href="<?= e(PLATFORM_URL) ?>/cookies.php">
+<link rel="alternate" hreflang="cs" href="<?= e(PLATFORM_URL) ?>/cookies.php?setlang=cs">
+<link rel="alternate" hreflang="en" href="<?= e(PLATFORM_URL) ?>/cookies.php?setlang=en">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +27,7 @@ require_once __DIR__ . '/includes/functions.php';
 body{font-family:Inter,Arial,sans-serif;color:#1e293b;background:#f8fafc;line-height:1.7}
 a{color:#2563eb}
 .topnav{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px}
-.topnav__inner{max-width:960px;margin:0 auto;display:flex;align-items:center;height:64px;gap:16px}
+.topnav__inner{max-width:960px;margin:0 auto;display:flex;align-items:center;height:64px;gap:12px}
 .topnav__brand{font-weight:800;font-size:1.25rem;color:#2563eb;text-decoration:none}
 .topnav__brand span{color:#0f172a}
 .topnav__spacer{flex:1}
@@ -53,14 +62,104 @@ footer{background:#1e293b;color:#94a3b8;padding:32px 24px}
   <div class="topnav__inner">
     <a href="/" class="topnav__brand">Rezervly<span>.</span></a>
     <div class="topnav__spacer"></div>
-    <a href="/login.php" class="topnav__link" style="margin-right:12px">Přihlásit se</a>
-    <a href="/register.php" class="topnav__btn">Registrace zdarma</a>
+    <?= langSwitcher() ?>
+    <a href="/login.php" class="topnav__link" style="margin-left:8px">
+      <?= $en ? 'Sign in' : 'Přihlásit se' ?>
+    </a>
+    <a href="/register.php" class="topnav__btn">
+      <?= $en ? 'Get started free' : 'Registrace zdarma' ?>
+    </a>
   </div>
 </nav>
 
 <main>
+<?php if ($en): ?>
+
+  <h1>Cookie Policy</h1>
+  <p class="subtitle">Effective from 1&nbsp;January&nbsp;2025 &bull; Last updated: <?= $updated ?></p>
+
+  <div class="highlight">
+    <p><strong>Controller:</strong> Oliver Hlavnička, Company ID (IČO): 29521939, e-mail: <a href="mailto:info@rezervly.eu">info@rezervly.eu</a></p>
+  </div>
+
+  <h2>1. What Are Cookies</h2>
+  <p>Cookies are small text files that a website stores in your browser when you visit it. They allow the website to remember your preferences, keep you logged in, and analyse how you use the site.</p>
+  <p>This website also uses <strong>localStorage</strong> (local browser storage) to store your cookie consent — with no expiration, stored only locally in your browser.</p>
+
+  <h2>2. Cookies We Use</h2>
+
+  <table class="cookie-table">
+    <thead>
+      <tr>
+        <th>Name / Key</th>
+        <th>Type</th>
+        <th>Purpose</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>rezervly_sess</code></td>
+        <td><span class="badge badge--green">Essential</span></td>
+        <td>Maintains login session (PHP session cookie). Essential for login functionality and admin panel.</td>
+        <td>Session (browser close)</td>
+      </tr>
+      <tr>
+        <td><code>lang</code></td>
+        <td><span class="badge badge--green">Essential</span></td>
+        <td>Stores the preferred interface language (cs / en).</td>
+        <td>1 year</td>
+      </tr>
+      <tr>
+        <td><code>cookie_consent</code><br><small>(localStorage)</small></td>
+        <td><span class="badge badge--green">Essential</span></td>
+        <td>Stores your cookie consent choice — prevents the banner from appearing again.</td>
+        <td>No expiry (localStorage)</td>
+      </tr>
+      <tr>
+        <td><code>__stripe_mid</code><br><code>__stripe_sid</code></td>
+        <td><span class="badge badge--yellow">Functional</span></td>
+        <td>Cookies set by the Stripe payment gateway during payment processing. Necessary to verify transactions and prevent fraud.</td>
+        <td>1 year / session</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>We <strong>do not use</strong> advertising or third-party tracking cookies (Google Analytics, Facebook Pixel, etc.).</p>
+
+  <h2>3. Essential Cookies</h2>
+  <p>Essential cookies are technically necessary for the basic functioning of the website — login, language settings, and security. These cookies cannot be disabled without losing functionality. They do not require your consent under Art. 5(3) of Directive 2002/58/EC (ePrivacy Directive) as amended.</p>
+
+  <h2>4. Functional Cookies (Stripe)</h2>
+  <p>The Stripe payment gateway sets its own cookies necessary for processing payments and fraud prevention. These cookies are only active on pages where a payment operation takes place. Stripe is certified to PCI DSS Level 1. More information: <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a>.</p>
+
+  <h2>5. Managing and Withdrawing Consent</h2>
+  <p>You can change or withdraw your cookie consent at any time:</p>
+  <ul>
+    <li><strong>Using the button below</strong> — clears your stored choice and shows the cookie banner again</li>
+    <li><strong>In your browser settings</strong> — most browsers allow you to view, block, or delete cookies</li>
+    <li><strong>Using browser tools</strong> — incognito/private mode, tracker-blocking extensions</li>
+  </ul>
+  <p>Instructions for managing cookies in specific browsers:</p>
+  <ul>
+    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+    <li><a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+    <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" target="_blank" rel="noopener">Apple Safari</a></li>
+    <li><a href="https://support.microsoft.com/en-us/windows/delete-and-manage-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank" rel="noopener">Microsoft Edge</a></li>
+  </ul>
+
+  <button class="btn-reset" onclick="resetCookieConsent()">Reset cookie settings</button>
+
+  <h2>6. Data Subject Rights</h2>
+  <p>To the extent that cookies process personal data, you have rights under GDPR (access, erasure, restriction of processing). For details, see our <a href="/privacy-policy.php">Privacy Policy</a>.</p>
+
+  <h2>7. Contact</h2>
+  <p>For questions about this Cookie Policy, contact us at <a href="mailto:info@rezervly.eu">info@rezervly.eu</a>.</p>
+
+<?php else: ?>
+
   <h1>Cookie policy</h1>
-  <p class="subtitle">Platné od 1.&nbsp;1.&nbsp;2025 &bull; Naposledy aktualizováno: <?= date('j. n. Y') ?></p>
+  <p class="subtitle">Platné od 1.&nbsp;1.&nbsp;2025 &bull; Naposledy aktualizováno: <?= $updated ?></p>
 
   <div class="highlight">
     <p><strong>Provozovatel:</strong> Oliver Hlavnička, IČO: 29521939, e-mail: <a href="mailto:info@rezervly.eu">info@rezervly.eu</a></p>
@@ -139,15 +238,17 @@ footer{background:#1e293b;color:#94a3b8;padding:32px 24px}
 
   <h2>7. Kontakt</h2>
   <p>S dotazy k cookie policy se obraťte na <a href="mailto:info@rezervly.eu">info@rezervly.eu</a>.</p>
+
+<?php endif; ?>
 </main>
 
 <footer>
   <div class="footer__inner">
     <div>© <?= date('Y') ?> Rezervly &bull; Oliver Hlavnička &bull; IČO: 29521939</div>
     <div class="footer__links">
-      <a href="/privacy-policy.php">Ochrana osobních údajů</a>
-      <a href="/terms.php">Obchodní podmínky</a>
-      <a href="/cookies.php">Cookies</a>
+      <a href="/privacy-policy.php"><?= $en ? 'Privacy Policy'   : 'Ochrana osobních údajů' ?></a>
+      <a href="/terms.php">         <?= $en ? 'Terms of Service' : 'Obchodní podmínky' ?></a>
+      <a href="/cookies.php">       <?= $en ? 'Cookies'          : 'Cookies' ?></a>
     </div>
   </div>
 </footer>
@@ -158,8 +259,8 @@ footer{background:#1e293b;color:#94a3b8;padding:32px 24px}
 function resetCookieConsent() {
   localStorage.removeItem('cookie_consent');
   var banner = document.getElementById('cookie-banner');
-  banner.style.display  = 'block';
-  banner.style.opacity  = '1';
+  banner.style.display    = 'block';
+  banner.style.opacity    = '1';
   banner.style.transition = '';
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
