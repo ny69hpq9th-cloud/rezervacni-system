@@ -709,3 +709,77 @@ html[data-theme="dark"] .hero__visual-header {
 html[data-theme="dark"] .hero__visual-body {
   background-color: #1a1a1a !important;
 }
+
+/* ============================================================
+   DARK MODE — register.php
+   ============================================================ */
+/* Right panel background */
+html[data-theme="dark"] .reg-right {
+  background-color: #0f0f0f !important;
+}
+/* Logo + title + subtitle */
+html[data-theme="dark"] .reg-logo,
+html[data-theme="dark"] .reg-title {
+  color: #e0e0e0 !important;
+}
+html[data-theme="dark"] .reg-subtitle {
+  color: #888888 !important;
+}
+/* Plan cards */
+html[data-theme="dark"] .plan-card-select {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #cccccc !important;
+}
+html[data-theme="dark"] .plan-card-select__sub {
+  color: #666666 !important;
+}
+html[data-theme="dark"] .plan-option input:checked + .plan-card-select {
+  background-color: #1e3a5f !important;
+  border-color: #2563eb !important;
+}
+/* Stripe card wrapper */
+html[data-theme="dark"] .stripe-card-wrap {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+}
+html[data-theme="dark"] .stripe-badge {
+  color: #666666 !important;
+}
+/* Trial banner */
+html[data-theme="dark"] .trial-banner {
+  background-color: #052e1c !important;
+  border-color: #064e30 !important;
+  color: #6ee7b7 !important;
+}
+/* Form controls (inputs, selects) */
+html[data-theme="dark"] .form-control {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #cccccc !important;
+}
+html[data-theme="dark"] .form-control::placeholder {
+  color: #555555 !important;
+}
+html[data-theme="dark"] .form-label {
+  color: #aaaaaa !important;
+}
+/* Password toggle icon */
+html[data-theme="dark"] .pw-toggle {
+  color: #555555 !important;
+}
+html[data-theme="dark"] .pw-toggle:hover {
+  color: #aaaaaa !important;
+}
+/* General inputs/selects/textareas on all pages */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #cccccc !important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #555555 !important;
+}
