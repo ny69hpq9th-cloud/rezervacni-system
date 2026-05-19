@@ -628,8 +628,16 @@ select.form-control { cursor: pointer; }
    ============================================================ */
 html[data-theme="dark"],
 html[data-theme="dark"] body {
-  background-color: #0f0f0f !important;
+  background-color: #0a0a1a !important;
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.08) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,.08) 0%, transparent 50%) !important;
   color: #cccccc !important;
+}
+html[data-theme="dark"] .reg-left,
+html[data-theme="dark"] .register-left,
+html[data-theme="dark"] .auth-left {
+  background-color: #0a0a1a !important;
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.1) 0%, transparent 60%) !important;
 }
 html[data-theme="dark"] nav,
 html[data-theme="dark"] header,
@@ -713,12 +721,9 @@ html[data-theme="dark"] .hero__visual-body {
 /* ============================================================
    DARK MODE — register.php
    ============================================================ */
-/* Left panel — replace blue gradient with dark background */
-html[data-theme="dark"] .reg-left,
-html[data-theme="dark"] .register-left,
-html[data-theme="dark"] .auth-left,
+/* Left panel — gradient matches body dark background */
 html[data-theme="dark"] .register-hero {
-  background: #111111 !important;
+  background: #0a0a1a !important;
   background-image: none !important;
 }
 html[data-theme="dark"] .reg-left h1,
