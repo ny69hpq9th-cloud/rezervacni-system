@@ -142,28 +142,14 @@ function themeHeadScript(): string {
         .     'document.documentElement.setAttribute("data-theme",p);'
         .   '}catch(e){}'
         . '})();'
-        /* 2. Toggle function */
-        . 'function toggleTheme(){'
-        .   'var h=document.documentElement;'
-        .   'var isDark=h.getAttribute("data-theme")==="dark";'
-        .   'var next=isDark?"light":"dark";'
-        .   'h.setAttribute("data-theme",next);'
-        .   'try{localStorage.setItem("rezervly_theme",next);}catch(e){}'
-        .   'var btn=document.getElementById("theme-toggle");'
-        .   'if(btn)btn.textContent=next==="dark"?"☀️":"🌙";'
-        . '}'
-        /* 3. After DOM ready: sync emoji icon + enable smooth transitions */
+        /* 2. Click handler — CSS handles icon swap via [data-theme="dark"], no textContent needed */
         . 'document.addEventListener("DOMContentLoaded",function(){'
-        .   'var t=document.documentElement.getAttribute("data-theme");'
         .   'var btn=document.getElementById("theme-toggle");'
         .   'if(btn){'
-        .     'btn.textContent=t==="dark"?"☀️":"🌙";'
         .     'btn.addEventListener("click",function(){'
         .       'var h=document.documentElement;'
-        .       'var isDark=h.getAttribute("data-theme")==="dark";'
-        .       'var next=isDark?"light":"dark";'
+        .       'var next=h.getAttribute("data-theme")==="dark"?"light":"dark";'
         .       'h.setAttribute("data-theme",next);'
-        .       'btn.textContent=next==="dark"?"☀️":"🌙";'
         .       'try{localStorage.setItem("rezervly_theme",next);}catch(e){}'
         .     '});'
         .   '}'
@@ -173,10 +159,29 @@ function themeHeadScript(): string {
 }
 
 /**
- * Dark/light mode toggle button (emoji, no CSS dependency).
- * No onclick attribute — handler is attached via addEventListener in themeHeadScript().
+ * Dark/light mode toggle — styled identically to .lang-switcher.
+ * SVG icons use currentColor; CSS [data-theme="dark"] swaps moon↔sun.
  */
 function themeToggle(): string {
-    return '<button id="theme-toggle" aria-label="Toggle dark mode"'
-        . ' style="background:none;border:none;cursor:pointer;padding:4px 8px;font-size:18px;line-height:1;vertical-align:middle;">🌙</button>';
+    $moon = '<svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" fill="none"'
+        . ' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+        . ' width="15" height="15" aria-hidden="true">'
+        . '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+        . '</svg>';
+    $sun  = '<svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" fill="none"'
+        . ' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+        . ' width="15" height="15" aria-hidden="true">'
+        . '<circle cx="12" cy="12" r="5"/>'
+        . '<line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>'
+        . '<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>'
+        . '<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>'
+        . '<line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>'
+        . '<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>'
+        . '<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        . '</svg>';
+    return '<div class="theme-switcher">'
+        . '<button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">'
+        . $moon . $sun
+        . '</button>'
+        . '</div>';
 }

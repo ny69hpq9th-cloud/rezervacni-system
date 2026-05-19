@@ -469,6 +469,36 @@ select.form-control { cursor: pointer; }
 .lang-btn--active { opacity: 1; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.1); }
 .lang-btn--active:hover { opacity: 1; }
 
+/* Theme switcher — same visual style as .lang-switcher */
+.theme-switcher {
+  display: flex; align-items: center;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px;
+}
+.theme-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 26px; border-radius: 6px;
+  background: #fff; border: none; cursor: pointer;
+  color: var(--text-secondary);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  transition: opacity var(--transition), background var(--transition), color var(--transition);
+}
+.theme-btn:hover { opacity: .75; }
+/* SVG icons — CSS swaps visibility based on current theme */
+.theme-icon { display: block; pointer-events: none; }
+.theme-icon--sun  { display: none; }
+.theme-icon--moon { display: block; }
+[data-theme="dark"] .theme-icon--sun  { display: block; }
+[data-theme="dark"] .theme-icon--moon { display: none; }
+[data-theme="dark"] .theme-btn {
+  background: var(--surface);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+[data-theme="dark"] .theme-switcher {
+  border-color: var(--border);
+}
+
 /* ============================================================
    UTILITIES
    ============================================================ */
