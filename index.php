@@ -391,21 +391,5 @@ foreach ($seoSchemas as $schema) {
 
 <script src="/assets/js/main.js"></script>
 <?php require_once __DIR__ . '/includes/cookie-banner.php'; ?>
-<script>
-(function() {
-  var btn = document.getElementById('theme-toggle');
-  console.log('toggle button:', btn);
-  if (btn) {
-    btn.onclick = function() {
-      console.log('clicked');
-      var html = document.documentElement;
-      var dark = html.getAttribute('data-theme') === 'dark';
-      html.setAttribute('data-theme', dark ? 'light' : 'dark');
-      btn.textContent = dark ? '🌙' : '☀️';
-      localStorage.setItem('rezervly_theme', dark ? 'light' : 'dark');
-    };
-  }
-})();
-</script>
 </body>
 </html>

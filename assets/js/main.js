@@ -1,42 +1,27 @@
-// Dark / light mode toggle
-document.addEventListener('DOMContentLoaded', function () {
-  var themeBtn = document.getElementById('theme-toggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      var html = document.documentElement;
-      var isDark = html.getAttribute('data-theme') === 'dark';
-      var next = isDark ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
-      try { localStorage.setItem('rezervly_theme', next); } catch (e) {}
-    });
-  }
-});
-
 // FAQ accordion
-document.querySelectorAll('.faq-question').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq-item');
-    const wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); });
     if (!wasOpen) item.classList.add('open');
   });
 });
 
 // Mobile nav
-const nav = document.querySelector('.nav');
-const toggle = document.querySelector('.nav__toggle');
-if (toggle && nav) {
-  toggle.addEventListener('click', () => nav.classList.toggle('nav--open'));
-  document.addEventListener('click', e => {
+var nav = document.querySelector('.nav');
+var navToggle = document.querySelector('.nav__toggle');
+if (navToggle && nav) {
+  navToggle.addEventListener('click', function() { nav.classList.toggle('nav--open'); });
+  document.addEventListener('click', function(e) {
     if (!nav.contains(e.target)) nav.classList.remove('nav--open');
   });
 }
 
 // Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var target = document.querySelector(a.getAttribute('href'));
     if (target) {
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -45,10 +30,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 // Auto-hide alerts
-document.querySelectorAll('.alert').forEach(el => {
-  setTimeout(() => {
+document.querySelectorAll('.alert').forEach(function(el) {
+  setTimeout(function() {
     el.style.transition = 'opacity .4s';
     el.style.opacity = '0';
-    setTimeout(() => el.remove(), 400);
+    setTimeout(function() { el.remove(); }, 400);
   }, 5000);
 });

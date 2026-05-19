@@ -174,8 +174,9 @@ function themeHeadScript(): string {
 
 /**
  * Dark/light mode toggle button (emoji, no CSS dependency).
+ * No onclick attribute — handler is attached via addEventListener in themeHeadScript().
  */
 function themeToggle(): string {
-    return '<button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"'
+    return '<button id="theme-toggle" aria-label="Toggle dark mode"'
         . ' style="background:none;border:none;cursor:pointer;padding:4px 8px;font-size:18px;line-height:1;vertical-align:middle;">🌙</button>';
 }
