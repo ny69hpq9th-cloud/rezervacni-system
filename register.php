@@ -348,11 +348,21 @@ function togglePw(btn) {
 <script>
 (function() {
   const stripe   = Stripe('<?= e(STRIPE_PUBLISHABLE_KEY) ?>');
-  const elements = stripe.elements({ locale: '<?= currentLang() ?>' });
+
+  /* Theme-aware colors — re-read on every init so dark mode works */
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const style = {
-    base: { fontSize:'15px', fontFamily:"'Inter',sans-serif", color:'#0f172a', '::placeholder':{ color:'#94a3b8' } },
-    invalid: { color:'#ef4444' },
+    base: {
+      fontSize: '15px',
+      fontFamily: "'Inter',sans-serif",
+      color: isDark ? '#cccccc' : '#0f172a',
+      '::placeholder': { color: isDark ? '#555555' : '#94a3b8' },
+      backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
+    },
+    invalid: { color: '#ef4444' },
   };
+
+  const elements = stripe.elements({ locale: '<?= currentLang() ?>' });
   const card = elements.create('card', { style, hidePostalCode: true });
   card.mount('#card-element');
   card.on('change', ({ error }) => {
