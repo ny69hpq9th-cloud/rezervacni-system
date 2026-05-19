@@ -44,60 +44,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $db   = getDB();
-            $slug = generateUniqueSlug($businessName, $db);
-            $hash = password_hash($password, PASSWORD_DEFAULT);
+            try {
+                $db   = getDB();
+                $slug = generateUniqueSlug($businessName, $db);
+                $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $db->prepare(
-                "INSERT INTO users (email,password,business_name,slug,business_type,plan,status)
-                 VALUES (?,?,?,?,?,'trial','active')"
-            )->execute([$email, $hash, $businessName, $slug, $businessType ?: null]);
-            $userId = (int)$db->lastInsertId();
+                error_log('[REG DEBUG] Attempting INSERT for email: ' . $email . ', slug: ' . $slug);
 
-            // Default working hours (Mon–Fri 9–17)
-            $whStmt = $db->prepare(
-                "INSERT INTO working_hours (user_id,day_of_week,is_working,start_time,end_time) VALUES (?,?,?,?,?)"
-            );
-            for ($i = 0; $i <= 6; $i++) {
-                $whStmt->execute([$userId, $i, ($i >= 1 && $i <= 5) ? 1 : 0, '09:00:00', '17:00:00']);
-            }
+                $db->prepare(
+                    "INSERT INTO users (email,password,business_name,slug,business_type,plan,status)
+                     VALUES (?,?,?,?,?,'trial','active')"
+                )->execute([$email, $hash, $businessName, $slug, $businessType ?: null]);
+                $userId = (int)$db->lastInsertId();
 
-            // Stripe integration
-            $stripeError = null;
-            if (STRIPE_ENABLED && $paymentMethodId) {
-                try {
-                    $customer     = stripeCreateCustomer($email, $businessName, $paymentMethodId);
-                    $subscription = stripeCreateSubscription($customer['id'], $plan, TRIAL_DAYS);
+                error_log('[REG DEBUG] INSERT OK, userId=' . $userId);
 
-                    $db->prepare(
-                        "UPDATE users SET stripe_customer_id=?, stripe_subscription_id=?, plan=? WHERE id=?"
-                    )->execute([$customer['id'], $subscription['id'], $plan, $userId]);
-
-                    $trialEnd = date('Y-m-d H:i:s', strtotime('+' . TRIAL_DAYS . ' days'));
-                    $db->prepare(
-                        "INSERT INTO subscriptions (user_id,plan,status,amount,expires_at,stripe_subscription_id)
-                         VALUES (?,?,'active',0,?,?)"
-                    )->execute([$userId, $plan, $trialEnd, $subscription['id']]);
-
-                } catch (Exception $e) {
-                    $stripeError = $e->getMessage();
-                    error_log('Stripe registration error for user #' . $userId . ': ' . $stripeError);
+                if ($userId === 0) {
+                    throw new Exception('INSERT succeeded but lastInsertId=0');
                 }
+
+                // Default working hours (Mon–Fri 9–17)
+                $whStmt = $db->prepare(
+                    "INSERT INTO working_hours (user_id,day_of_week,is_working,start_time,end_time) VALUES (?,?,?,?,?)"
+                );
+                for ($i = 0; $i <= 6; $i++) {
+                    $whStmt->execute([$userId, $i, ($i >= 1 && $i <= 5) ? 1 : 0, '09:00:00', '17:00:00']);
+                }
+
+                // Stripe integration
+                $stripeError = null;
+                if (STRIPE_ENABLED && $paymentMethodId) {
+                    try {
+                        error_log('[REG DEBUG] Creating Stripe customer for userId=' . $userId);
+                        $customer     = stripeCreateCustomer($email, $businessName, $paymentMethodId);
+                        $subscription = stripeCreateSubscription($customer['id'], $plan, TRIAL_DAYS);
+
+                        $db->prepare(
+                            "UPDATE users SET stripe_customer_id=?, stripe_subscription_id=?, plan=? WHERE id=?"
+                        )->execute([$customer['id'], $subscription['id'], $plan, $userId]);
+
+                        $trialEnd = date('Y-m-d H:i:s', strtotime('+' . TRIAL_DAYS . ' days'));
+                        $db->prepare(
+                            "INSERT INTO subscriptions (user_id,plan,status,amount,expires_at,stripe_subscription_id)
+                             VALUES (?,?,'active',0,?,?)"
+                        )->execute([$userId, $plan, $trialEnd, $subscription['id']]);
+
+                        error_log('[REG DEBUG] Stripe OK, subscription created');
+
+                    } catch (Exception $e) {
+                        $stripeError = $e->getMessage();
+                        error_log('[REG DEBUG] Stripe error for user #' . $userId . ': ' . $stripeError);
+                    }
+                }
+
+                $userRow = $db->query("SELECT * FROM users WHERE id=$userId")->fetch();
+                try { emailWelcome($userRow); } catch (Exception $e) {
+                    error_log('[REG DEBUG] Email error: ' . $e->getMessage());
+                }
+
+                session_regenerate_id(true);
+                $_SESSION['user_id']    = $userId;
+                $_SESSION['user_email'] = $email;
+
+                error_log('[REG DEBUG] Registration complete, redirecting to dashboard');
+
+                if ($stripeError) {
+                    flash('warning', __('reg.warn_stripe', ['error' => $stripeError]));
+                } else {
+                    flash('success', __('reg.ok_stripe'));
+                }
+                redirect(PLATFORM_URL . '/dashboard/index.php');
+
+            } catch (Exception $e) {
+                error_log('[REG DEBUG] FATAL registration error: ' . $e->getMessage() . ' | trace: ' . $e->getTraceAsString());
+                $errors[] = 'Registrace selhala. Zkuste to znovu nebo kontaktujte podporu. (' . htmlspecialchars($e->getMessage()) . ')';
             }
-
-            $userRow = $db->query("SELECT * FROM users WHERE id=$userId")->fetch();
-            try { emailWelcome($userRow); } catch (Exception $e) {}
-
-            session_regenerate_id(true);
-            $_SESSION['user_id']    = $userId;
-            $_SESSION['user_email'] = $email;
-
-            if ($stripeError) {
-                flash('warning', __('reg.warn_stripe', ['error' => $stripeError]));
-            } else {
-                flash('success', __('reg.ok_stripe'));
-            }
-            redirect(PLATFORM_URL . '/dashboard/index.php');
         }
     }
 }
