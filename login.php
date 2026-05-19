@@ -37,7 +37,7 @@ $flash = getFlash();
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
-<script src="/assets/js/theme.js"></script>
+<?= themeHeadScript() ?>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= __('auth.login_title') ?> – <?= e(PLATFORM_TITLE) ?></title>
 <?php renderSeoHead([

@@ -128,8 +128,33 @@ function langSwitcher(string $extraClass = ''): string {
 }
 
 /**
+ * Inline <script> tag for <head> — anti-FOUC + toggleTheme().
+ * Call as the FIRST thing inside <head> before any CSS.
+ * No external file dependency.
+ */
+function themeHeadScript(): string {
+    return '<script>'
+        . '(function(){'
+        .   'try{'
+        .     'var t=localStorage.getItem("rezervly_theme");'
+        .     'var p=t||(window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");'
+        .     'document.documentElement.setAttribute("data-theme",p);'
+        .   '}catch(e){}'
+        . '})();'
+        . 'function toggleTheme(){'
+        .   'var h=document.documentElement;'
+        .   'var n=h.getAttribute("data-theme")==="dark"?"light":"dark";'
+        .   'h.setAttribute("data-theme",n);'
+        .   'try{localStorage.setItem("rezervly_theme",n);}catch(e){}'
+        . '}'
+        . 'window.addEventListener("load",function(){'
+        .   'document.documentElement.classList.add("theme-ready");'
+        . '});'
+        . '</script>' . "\n";
+}
+
+/**
  * Dark/light mode toggle button.
- * Requires /assets/js/theme.js to be loaded on the page.
  */
 function themeToggle(): string {
     return '<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">'

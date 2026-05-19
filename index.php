@@ -15,7 +15,7 @@ $lang  = currentLang();
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
-<script src="/assets/js/theme.js"></script>
+<?= themeHeadScript() ?>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= e(PLATFORM_TITLE) ?></title>
 <?php renderSeoHead([
@@ -390,7 +390,6 @@ foreach ($seoSchemas as $schema) {
 </footer>
 
 <script src="/assets/js/main.js"></script>
-<script>requestAnimationFrame(function(){document.documentElement.classList.add('theme-ready');});</script>
 <?php require_once __DIR__ . '/includes/cookie-banner.php'; ?>
 </body>
 </html>

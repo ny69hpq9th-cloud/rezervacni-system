@@ -109,7 +109,7 @@ $bizTypes = __array('reg.biz_types');
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
-<script src="/assets/js/theme.js"></script>
+<?= themeHeadScript() ?>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= __('reg.page_title') ?> – <?= e(PLATFORM_TITLE) ?></title>
 <?php renderSeoHead([

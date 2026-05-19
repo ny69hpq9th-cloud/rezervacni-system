@@ -36,7 +36,7 @@ function navIcon(string $icon): string {
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
-<script src="/assets/js/theme.js"></script>
+<?= themeHeadScript() ?>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= e($pageTitle ?? 'Dashboard') ?> – <?= e(PLATFORM_TITLE) ?></title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">

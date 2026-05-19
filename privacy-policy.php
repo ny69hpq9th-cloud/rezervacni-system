@@ -20,9 +20,9 @@ $updated = date('j. n. Y');
 <link rel="alternate" hreflang="cs" href="<?= e(PLATFORM_URL) ?>/privacy-policy.php?setlang=cs">
 <link rel="alternate" hreflang="en" href="<?= e(PLATFORM_URL) ?>/privacy-policy.php?setlang=en">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<?= themeHeadScript() ?>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="/assets/js/theme.js"></script>
 <link rel="stylesheet" href="/assets/css/style.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
