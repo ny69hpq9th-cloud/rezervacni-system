@@ -245,24 +245,39 @@ $bizTypes = __array('reg.biz_types');
           <div class="form-group">
             <label class="form-label"><?= __('auth.password') ?> <span>*</span></label>
             <div class="pw-wrap">
-              <input type="password" name="password" class="form-control"
+              <input type="password" id="pw-input" name="password" class="form-control"
                      placeholder="<?= __('reg.password_ph') ?>" required minlength="8">
               <button type="button" class="pw-toggle" onclick="togglePw(this)" title="Zobrazit/skrýt heslo">
                 <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
               </button>
             </div>
+            <div id="pw-strength-wrap" style="display:none;margin-top:6px">
+              <div style="height:4px;border-radius:2px;background:#e2e8f0;overflow:hidden">
+                <div id="pw-strength-fill" style="height:100%;width:0;border-radius:2px;transition:width .25s,background .25s"></div>
+              </div>
+              <span id="pw-strength-label" style="font-size:.72rem;margin-top:4px;display:block"></span>
+            </div>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label"><?= __('reg.biz_type') ?></label>
-          <select name="business_type" class="form-control">
+          <select id="biz-type-select" name="business_type" class="form-control">
             <option value=""><?= __('reg.biz_type_sel') ?></option>
             <?php foreach ($bizTypes as $t): ?>
               <option value="<?= e($t) ?>" <?= ($old['businessType'] ?? '') === $t ? 'selected' : '' ?>><?= e($t) ?></option>
             <?php endforeach; ?>
           </select>
+          <div id="biz-type-other-wrap" style="display:none;margin-top:8px">
+            <input type="text" id="biz-type-other" class="form-control"
+                   placeholder="<?= currentLang() === 'en' ? 'Specify your business type' : 'Upřesněte typ podnikání' ?>"
+                   value="<?php
+                     $bt = $old['businessType'] ?? '';
+                     $lastType = end($bizTypes);
+                     echo ($bt && $bt === $lastType) ? '' : e($bt);
+                   ?>">
+          </div>
         </div>
 
         <!-- Plan selector -->
@@ -384,5 +399,81 @@ function togglePw(btn) {
 })();
 </script>
 <?php endif; ?>
+<script>
+(function() {
+  var isEn = <?= currentLang() === 'en' ? 'true' : 'false' ?>;
+
+  /* ── "Jiné / Other" field ─────────────────────────────── */
+  var bizSelect  = document.getElementById('biz-type-select');
+  var otherWrap  = document.getElementById('biz-type-other-wrap');
+  var otherInput = document.getElementById('biz-type-other');
+
+  function isOtherSelected() {
+    var opt = bizSelect.options[bizSelect.selectedIndex];
+    return opt && (opt.text === 'Jiné' || opt.text === 'Other');
+  }
+
+  function updateBizOther() {
+    var other = isOtherSelected();
+    otherWrap.style.display = other ? 'block' : 'none';
+    if (other) {
+      bizSelect.removeAttribute('name');
+      otherInput.setAttribute('name', 'business_type');
+      otherInput.required = true;
+    } else {
+      bizSelect.setAttribute('name', 'business_type');
+      otherInput.removeAttribute('name');
+      otherInput.required = false;
+    }
+  }
+
+  bizSelect.addEventListener('change', updateBizOther);
+  updateBizOther(); /* run on load (handles back-navigation with pre-selected value) */
+
+  /* ── Password strength indicator ─────────────────────── */
+  var pwInput      = document.getElementById('pw-input');
+  var strengthWrap = document.getElementById('pw-strength-wrap');
+  var strengthFill = document.getElementById('pw-strength-fill');
+  var strengthLabel= document.getElementById('pw-strength-label');
+
+  var levels = isEn
+    ? [
+        { label: 'Weak',        color: '#ef4444', w: '25%'  },
+        { label: 'Fair',        color: '#f97316', w: '50%'  },
+        { label: 'Strong',      color: '#eab308', w: '75%'  },
+        { label: 'Very strong', color: '#22c55e', w: '100%' },
+      ]
+    : [
+        { label: 'Slabé',        color: '#ef4444', w: '25%'  },
+        { label: 'Střední',      color: '#f97316', w: '50%'  },
+        { label: 'Silné',        color: '#eab308', w: '75%'  },
+        { label: 'Velmi silné',  color: '#22c55e', w: '100%' },
+      ];
+
+  function getStrengthLevel(pw) {
+    var score = 0;
+    if (pw.length >= 8)            score++;
+    if (pw.length >= 12)           score++;
+    if (/[A-Z]/.test(pw))         score++;
+    if (/[0-9]/.test(pw))         score++;
+    if (/[^A-Za-z0-9]/.test(pw))  score++;
+    if (score <= 1) return 0;
+    if (score === 2) return 1;
+    if (score <= 4) return 2;
+    return 3;
+  }
+
+  pwInput.addEventListener('input', function() {
+    var val = this.value;
+    if (!val) { strengthWrap.style.display = 'none'; return; }
+    strengthWrap.style.display = 'block';
+    var lv = levels[getStrengthLevel(val)];
+    strengthFill.style.width      = lv.w;
+    strengthFill.style.background = lv.color;
+    strengthLabel.textContent     = lv.label;
+    strengthLabel.style.color     = lv.color;
+  });
+})();
+</script>
 </body>
 </html>
