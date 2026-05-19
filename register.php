@@ -257,6 +257,12 @@ $bizTypes = __array('reg.biz_types');
                 <div id="pw-strength-fill" style="height:100%;width:0;border-radius:2px;transition:width .25s,background .25s"></div>
               </div>
               <span id="pw-strength-label" style="font-size:.72rem;margin-top:4px;display:block"></span>
+              <ul id="pw-criteria" style="list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">
+                <li id="pc-len"  style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Min. 8 characters' : 'Minimálně 8 znaků' ?></li>
+                <li id="pc-num"  style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Number (0–9)' : 'Číslo (0–9)' ?></li>
+                <li id="pc-up"   style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Uppercase (A–Z)' : 'Velké písmeno (A–Z)' ?></li>
+                <li id="pc-spec" style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Special char (!@#…)' : 'Speciální znak (!@#…)' ?></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -473,6 +479,22 @@ function togglePw(btn) {
     return 3;
   }
 
+  var criteriaEls = {
+    len:  document.getElementById('pc-len'),
+    up:   document.getElementById('pc-up'),
+    num:  document.getElementById('pc-num'),
+    spec: document.getElementById('pc-spec'),
+  };
+
+  function setCriterion(el, met, label) {
+    el.textContent = (met ? '✓ ' : '× ') + label;
+    el.style.color = met ? '#22c55e' : '#ef4444';
+  }
+
+  var criteriaLabels = isEn
+    ? { len: 'Min. 8 characters', up: 'Uppercase (A–Z)', num: 'Number (0–9)', spec: 'Special char (!@#…)' }
+    : { len: 'Minimálně 8 znaků', up: 'Velké písm. (A–Z)', num: 'Číslo (0–9)', spec: 'Speciální znak (!@#…)' };
+
   pwInput.addEventListener('input', function() {
     var val = this.value;
     if (!val) { strengthWrap.style.display = 'none'; return; }
@@ -482,6 +504,11 @@ function togglePw(btn) {
     strengthFill.style.background = lv.color;
     strengthLabel.textContent     = lv.label;
     strengthLabel.style.color     = lv.color;
+    /* criteria */
+    setCriterion(criteriaEls.len,  val.length >= 8,            criteriaLabels.len);
+    setCriterion(criteriaEls.up,   /[A-Z]/.test(val),          criteriaLabels.up);
+    setCriterion(criteriaEls.num,  /[0-9]/.test(val),          criteriaLabels.num);
+    setCriterion(criteriaEls.spec, /[^A-Za-z0-9]/.test(val),   criteriaLabels.spec);
   });
 })();
 </script>
