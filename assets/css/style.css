@@ -675,6 +675,13 @@ html[data-theme="dark"] li,
 html[data-theme="dark"] span {
   color: #cccccc !important;
 }
+/* Password criteria — override the generic li rule above */
+#pw-criteria li               { color: #666666 !important; }
+#pw-criteria li.crit-met      { color: #22c55e !important; }
+#pw-criteria li.crit-fail     { color: #ef4444 !important; }
+html[data-theme="dark"] #pw-criteria li           { color: #555555 !important; }
+html[data-theme="dark"] #pw-criteria li.crit-met  { color: #22c55e !important; }
+html[data-theme="dark"] #pw-criteria li.crit-fail { color: #ef4444 !important; }
 html[data-theme="dark"] footer {
   background-color: #080808 !important;
   color: #888888 !important;

@@ -490,7 +490,8 @@ function togglePw(btn) {
 
   function setCriterion(el, met, label) {
     el.textContent = (met ? '✓ ' : '× ') + label;
-    el.style.color = met ? '#22c55e' : '#ef4444';
+    el.classList.toggle('crit-met',  met);
+    el.classList.toggle('crit-fail', !met);
   }
 
   var criteriaLabels = isEn
