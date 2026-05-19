@@ -204,10 +204,11 @@ select.form-control { cursor: pointer; }
   padding: 3px 10px; border-radius: 99px;
   font-size: 0.775rem; font-weight: 600; letter-spacing: .02em;
 }
-.badge--success { background: #ecfdf5; color: #059669; }
-.badge--warning { background: #fffbeb; color: #d97706; }
-.badge--danger  { background: #fef2f2; color: #dc2626; }
-.badge--info    { background: #eff6ff; color: #2563eb; }
+/* Vivid solid badges — legible at a glance */
+.badge--success { background: #10b981; color: #fff; }
+.badge--warning { background: #f59e0b; color: #fff; }
+.badge--danger  { background: #ef4444; color: #fff; }
+.badge--info    { background: #3b82f6; color: #fff; }
 .badge--default { background: var(--bg-secondary); color: var(--text-secondary); }
 
 /* ============================================================
@@ -331,7 +332,8 @@ select.form-control { cursor: pointer; }
    PRICING
    ============================================================ */
 .pricing__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 860px; margin: 0 auto; }
-.pricing-card { padding: 40px; position: relative; }
+/* overflow: visible so the popular badge (top:-14px) isn't clipped by .card's overflow:hidden */
+.pricing-card { padding: 40px; position: relative; overflow: visible !important; }
 .pricing-card--popular {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary), var(--shadow-lg);
@@ -579,11 +581,11 @@ select.form-control { cursor: pointer; }
 [data-theme="dark"] .alert--warning { background: #2d1a00; color: #fcd34d; border-color: #78350f; }
 [data-theme="dark"] .alert--info    { background: #0a1628; color: #93c5fd; border-color: #1e3a8a; }
 
-/* Badges */
-[data-theme="dark"] .badge--success { background: #052e1c; color: #34d399; }
-[data-theme="dark"] .badge--warning { background: #2d1a00; color: #fbbf24; }
-[data-theme="dark"] .badge--danger  { background: #2d0a0a; color: #f87171; }
-[data-theme="dark"] .badge--info    { background: #0a1628; color: #60a5fa; }
+/* Badges — dark mode keeps solid colors, slightly muted */
+[data-theme="dark"] .badge--success { background: #059669; color: #fff; }
+[data-theme="dark"] .badge--warning { background: #d97706; color: #fff; }
+[data-theme="dark"] .badge--danger  { background: #dc2626; color: #fff; }
+[data-theme="dark"] .badge--info    { background: #2563eb; color: #fff; }
 
 /* Mobile nav */
 [data-theme="dark"] .nav--open .nav__links {
@@ -1100,4 +1102,68 @@ html[data-theme="dark"] .pricing-card--popular {
 /* Sidebar overlay (mobile) */
 html[data-theme="dark"] .modal-overlay {
   background: rgba(0,0,15,.8) !important;
+}
+
+/* ── Template picker modal (services.php) ── */
+/* Backdrop */
+html[data-theme="dark"] #tmpl-modal {
+  background: rgba(0,0,20,.75) !important;
+}
+/* Modal box */
+html[data-theme="dark"] #tmpl-modal > div {
+  background-color: #0e0e24 !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+/* Header */
+html[data-theme="dark"] #tmpl-modal .tmpl-header {
+  border-bottom-color: rgba(255,255,255,.07) !important;
+  background-color: transparent !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-title {
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-sub {
+  color: #7070a0 !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-close {
+  background: rgba(255,255,255,.06) !important;
+  color: #7070a0 !important;
+}
+/* Category and service buttons (JS-rendered inline styles are overridden by JS, but CSS covers initial render) */
+html[data-theme="dark"] #tmpl-modal .tmpl-cat-btn {
+  background: rgba(255,255,255,.04) !important;
+  border-color: rgba(255,255,255,.1) !important;
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-svc-btn {
+  background: rgba(255,255,255,.03) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-hint {
+  color: #555577 !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-back {
+  color: #93c5fd !important;
+}
+html[data-theme="dark"] #tmpl-modal .tmpl-svc-dur {
+  background: rgba(255,255,255,.07) !important;
+  color: #7070a0 !important;
+}
+
+/* ── Subscription "jak zaplatit" box ── */
+html[data-theme="dark"] .pay-how-box {
+  background-color: rgba(255,255,255,.04) !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: #9090b0 !important;
+}
+html[data-theme="dark"] .pay-how-box strong {
+  color: #c0c0e0 !important;
+}
+html[data-theme="dark"] .pay-how-box--pro {
+  background-color: rgba(37,99,235,.08) !important;
+  color: #93c5fd !important;
+}
+html[data-theme="dark"] .pay-how-box--pro strong {
+  color: #bfdbfe !important;
 }

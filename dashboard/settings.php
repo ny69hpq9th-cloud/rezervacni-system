@@ -36,9 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logoPath = null;
         if (!empty($_FILES['logo']['name']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
             error_log('[LOGO UPLOAD] File received: ' . $_FILES['logo']['name'] . ', size: ' . $_FILES['logo']['size'] . ', tmp: ' . $_FILES['logo']['tmp_name']);
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime  = finfo_file($finfo, $_FILES['logo']['tmp_name']);
-            finfo_close($finfo);
+            // finfo is preferred; fall back to mime_content_type() or extension-based detection
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime  = finfo_file($finfo, $_FILES['logo']['tmp_name']);
+                finfo_close($finfo);
+            } elseif (function_exists('mime_content_type')) {
+                $mime = mime_content_type($_FILES['logo']['tmp_name']);
+            } else {
+                // Last-resort: trust browser-supplied MIME (less secure but functional)
+                $mime = $_FILES['logo']['type'];
+            }
+            error_log('[LOGO UPLOAD] Detected MIME: ' . $mime);
             $allowed = ['image/jpeg','image/png','image/gif','image/svg+xml','image/webp'];
             if (!in_array($mime, $allowed)) {
                 $errors[] = __('dash.err_logo_type');

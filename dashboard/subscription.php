@@ -103,7 +103,7 @@ require __DIR__ . '/_layout.php';
       <div class="pricing-card__feature"><?= __('dash.basic_f3') ?></div>
       <div class="pricing-card__feature"><?= __('dash.basic_f4') ?></div>
     </div>
-    <div style="background:#f8fafc;border-radius:8px;padding:14px;font-size:.875rem;color:#64748b">
+    <div class="pay-how-box" style="background:#f8fafc;border-radius:8px;padding:14px;font-size:.875rem;color:#64748b">
       <strong><?= __('dash.how_to_pay') ?></strong> <?= __('dash.pay_basic', ['vs01' => $uid . '0001', 'price' => langPrice('basic') . ' ' . langCurrencySymbol()]) ?>
       <?= __('dash.pay_after') ?>
     </div>
@@ -128,7 +128,7 @@ require __DIR__ . '/_layout.php';
       <div class="pricing-card__feature"><?= __('dash.pro_f4') ?></div>
       <div class="pricing-card__feature"><?= __('dash.pro_f5') ?></div>
     </div>
-    <div style="background:#eff6ff;border-radius:8px;padding:14px;font-size:.875rem;color:#1e40af">
+    <div class="pay-how-box pay-how-box--pro" style="background:#eff6ff;border-radius:8px;padding:14px;font-size:.875rem;color:#1e40af">
       <strong><?= __('dash.how_to_pay') ?></strong> <?= __('dash.pay_pro', ['vs02' => $uid . '0002', 'price' => langPrice('pro') . ' ' . langCurrencySymbol()]) ?>
       <?= __('dash.pay_after') ?>
     </div>

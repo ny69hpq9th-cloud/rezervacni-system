@@ -322,15 +322,15 @@ $durations = [
 
 <!-- ── Template picker modal ────────────────────────────────────────────── -->
 <div id="tmpl-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.5);align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.18)">
+  <div style="border-radius:16px;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.18);background:#fff" class="tmpl-box">
 
     <!-- Header -->
-    <div style="padding:18px 22px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+    <div class="tmpl-header" style="padding:18px 22px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
       <div>
-        <div style="font-size:1rem;font-weight:700;color:#0f172a"><?= e($tmplTitle) ?></div>
-        <div id="tmpl-sub" style="font-size:.78rem;color:#64748b;margin-top:2px"><?= e($tmplStep1) ?></div>
+        <div class="tmpl-title" style="font-size:1rem;font-weight:700;color:#0f172a"><?= e($tmplTitle) ?></div>
+        <div id="tmpl-sub" class="tmpl-sub" style="font-size:.78rem;color:#64748b;margin-top:2px"><?= e($tmplStep1) ?></div>
       </div>
-      <button onclick="closeTmplModal()" style="width:30px;height:30px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:1rem;color:#64748b;display:flex;align-items:center;justify-content:center">✕</button>
+      <button onclick="closeTmplModal()" class="tmpl-close" style="width:30px;height:30px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:1rem;color:#64748b;display:flex;align-items:center;justify-content:center">✕</button>
     </div>
 
     <!-- Step 1: Category grid -->
@@ -340,11 +340,11 @@ $durations = [
 
     <!-- Step 2: Service list -->
     <div id="tmpl-step2" style="display:none;padding:18px 22px;overflow-y:auto;flex:1">
-      <button onclick="tmplBack()" style="background:none;border:none;cursor:pointer;color:#2563eb;font-size:.82rem;font-weight:600;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px">
+      <button onclick="tmplBack()" class="tmpl-back" style="background:none;border:none;cursor:pointer;color:#2563eb;font-size:.82rem;font-weight:600;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
         <?= e($tmplBack) ?>
       </button>
-      <p style="font-size:.78rem;color:#94a3b8;margin-bottom:12px"><?= e($tmplHint) ?></p>
+      <p class="tmpl-hint" style="font-size:.78rem;color:#94a3b8;margin-bottom:12px"><?= e($tmplHint) ?></p>
       <div id="tmpl-svcs"></div>
     </div>
   </div>
@@ -371,26 +371,63 @@ $durations = [
     if (e.target === modal) closeTmplModal();
   });
 
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+  function tmplColors() {
+    var d = isDark();
+    return {
+      catBg:     d ? 'rgba(255,255,255,.04)' : '#f8fafc',
+      catBorder: d ? 'rgba(255,255,255,.1)'  : '#e2e8f0',
+      catText:   d ? '#d0d0f0'               : '#0f172a',
+      catSub:    d ? '#7070a0'               : '#94a3b8',
+      catHoverBg:     d ? 'rgba(59,130,246,.12)' : '#eff6ff',
+      catHoverBorder: d ? 'rgba(59,130,246,.4)'  : '#2563eb',
+      svcBg:     d ? 'rgba(255,255,255,.03)' : '#fff',
+      svcBorder: d ? 'rgba(255,255,255,.09)' : '#e2e8f0',
+      svcText:   d ? '#d0d0f0'               : '#0f172a',
+      svcDurBg:  d ? 'rgba(255,255,255,.07)' : '#f1f5f9',
+      svcDurText:d ? '#7070a0'               : '#64748b',
+      svcHoverBg:     d ? 'rgba(59,130,246,.1)'  : '#eff6ff',
+      svcHoverBorder: d ? 'rgba(59,130,246,.4)'  : '#2563eb',
+    };
+  }
+
+  /* Also apply dark mode to the modal box itself when opened */
+  function applyModalTheme() {
+    var box = modal.querySelector('.tmpl-box');
+    if (!box) return;
+    if (isDark()) {
+      box.style.background   = '#0e0e24';
+      box.style.borderColor  = 'rgba(255,255,255,.08)';
+    } else {
+      box.style.background   = '#fff';
+      box.style.borderColor  = '';
+    }
+  }
+
   function showCats() {
     document.getElementById('tmpl-step1').style.display = 'block';
     document.getElementById('tmpl-step2').style.display = 'none';
     document.getElementById('tmpl-sub').textContent = SUB_STEP1;
+    applyModalTheme();
 
+    var c = tmplColors();
     var catsEl = document.getElementById('tmpl-cats');
     catsEl.innerHTML = TEMPLATES.map(function (cat, idx) {
       return '<button type="button" data-cat-idx="' + idx + '" style="'
         + 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;'
-        + 'padding:16px 10px;border:1.5px solid #e2e8f0;border-radius:12px;background:#f8fafc;'
+        + 'padding:16px 10px;border:1.5px solid ' + c.catBorder + ';border-radius:12px;background:' + c.catBg + ';'
         + 'cursor:pointer;transition:all .15s;text-align:center;width:100%;">'
         + '<span style="font-size:1.8rem;line-height:1">' + cat.icon + '</span>'
-        + '<span style="font-size:.78rem;font-weight:600;color:#0f172a;line-height:1.3">' + escHtml(cat.name) + '</span>'
-        + '<span style="font-size:.7rem;color:#94a3b8">' + cat.services.length + <?= json_encode($isEn ? '" services"' : '" služeb"') ?> + '</span>'
+        + '<span style="font-size:.78rem;font-weight:600;color:' + c.catText + ';line-height:1.3">' + escHtml(cat.name) + '</span>'
+        + '<span style="font-size:.7rem;color:' + c.catSub + '">' + cat.services.length + <?= json_encode($isEn ? '" services"' : '" služeb"') ?> + '</span>'
         + '</button>';
     }).join('');
 
     catsEl.querySelectorAll('[data-cat-idx]').forEach(function(btn) {
-      btn.addEventListener('mouseover', function() { btn.style.borderColor='#2563eb'; btn.style.background='#eff6ff'; });
-      btn.addEventListener('mouseout',  function() { btn.style.borderColor='#e2e8f0'; btn.style.background='#f8fafc'; });
+      btn.addEventListener('mouseover', function() { btn.style.borderColor=c.catHoverBorder; btn.style.background=c.catHoverBg; });
+      btn.addEventListener('mouseout',  function() { btn.style.borderColor=c.catBorder;      btn.style.background=c.catBg; });
       btn.addEventListener('click', function() {
         showSvcs(parseInt(btn.dataset.catIdx));
       });
@@ -405,20 +442,21 @@ $durations = [
     document.getElementById('tmpl-step2').style.display = 'block';
     document.getElementById('tmpl-sub').textContent = cat.name;
 
+    var c = tmplColors();
     var svcsEl = document.getElementById('tmpl-svcs');
     svcsEl.innerHTML = cat.services.map(function (svc, idx) {
       return '<button type="button" data-svc-idx="' + idx + '" style="'
         + 'display:flex;justify-content:space-between;align-items:center;width:100%;'
-        + 'padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;'
+        + 'padding:12px 14px;border:1.5px solid ' + c.svcBorder + ';border-radius:10px;background:' + c.svcBg + ';'
         + 'cursor:pointer;margin-bottom:8px;text-align:left;transition:all .15s;">'
-        + '<span style="font-weight:600;font-size:.875rem;color:#0f172a">' + escHtml(svc[0]) + '</span>'
-        + '<span style="font-size:.78rem;color:#64748b;background:#f1f5f9;padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:12px">' + fmtDur(svc[1]) + '</span>'
+        + '<span style="font-weight:600;font-size:.875rem;color:' + c.svcText + '">' + escHtml(svc[0]) + '</span>'
+        + '<span style="font-size:.78rem;color:' + c.svcDurText + ';background:' + c.svcDurBg + ';padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:12px">' + fmtDur(svc[1]) + '</span>'
         + '</button>';
     }).join('');
 
     svcsEl.querySelectorAll('[data-svc-idx]').forEach(function(btn) {
-      btn.addEventListener('mouseover', function() { btn.style.borderColor='#2563eb'; btn.style.background='#eff6ff'; });
-      btn.addEventListener('mouseout',  function() { btn.style.borderColor='#e2e8f0'; btn.style.background='#fff'; });
+      btn.addEventListener('mouseover', function() { btn.style.borderColor=c.svcHoverBorder; btn.style.background=c.svcHoverBg; });
+      btn.addEventListener('mouseout',  function() { btn.style.borderColor=c.svcBorder;      btn.style.background=c.svcBg; });
       btn.addEventListener('click', function() {
         var svc = cat.services[parseInt(btn.dataset.svcIdx)];
         selectTmpl(svc[0], svc[1]);

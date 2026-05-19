@@ -70,7 +70,7 @@ echo '<script type="application/ld+json">' . $bizSchema . '</script>' . "\n";
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
-<link rel="stylesheet" href="/assets/css/booking.css">
+<link rel="stylesheet" href="/assets/css/booking.css?v=<?php echo time(); ?>">
 <style>
 :root {
   --accent: <?= e($accentColor) ?>;
@@ -327,8 +327,8 @@ echo '<script type="application/ld+json">' . $bizSchema . '</script>' . "\n";
 
 </main>
 
-<footer style="text-align:center;padding:20px;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0">
-  <?= __('book.powered_by') ?> <a href="/" style="color:#94a3b8"><?= e($pname) ?></a>
+<footer class="booking-footer">
+  <?= __('book.powered_by') ?> <a href="/" class="booking-footer__link"><?= e($pname) ?></a>
 </footer>
 
 <script src="/assets/js/booking.js"></script>

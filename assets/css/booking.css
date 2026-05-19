@@ -184,12 +184,29 @@
 /* Nav buttons */
 .booking-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
 
+/* Footer */
+.booking-footer {
+  text-align: center; padding: 20px; font-size: .75rem;
+  color: #94a3b8; border-top: 1px solid #e2e8f0;
+}
+.booking-footer__link { color: #94a3b8; }
+
 /* ============================================================
    DARK MODE — BOOKING PAGE
    ============================================================ */
 [data-theme="dark"] .booking-page {
   background: #0a0a1a;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,.07) 0%, transparent 50%);
 }
+
+/* Footer */
+[data-theme="dark"] .booking-footer {
+  border-top-color: rgba(255,255,255,.05);
+  color: #555577;
+}
+[data-theme="dark"] .booking-footer__link { color: #555577; }
 
 /* Header */
 [data-theme="dark"] .booking-header {
