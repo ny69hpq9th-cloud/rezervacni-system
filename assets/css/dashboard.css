@@ -309,7 +309,13 @@
   text-align: center; cursor: pointer; transition: border-color .15s;
 }
 .logo-upload-area:hover { border-color: #2563eb; }
-.logo-upload-area input { display: none; }
+.logo-upload-area input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .logo-preview { width: 80px; height: 80px; object-fit: contain; margin: 0 auto 12px; }
 
 /* ============================================================
@@ -372,9 +378,15 @@
    ============================================================ */
 [data-theme="dark"] .dash-wrapper          { background: #121212; }
 
-/* Sidebar stays very dark regardless */
-[data-theme="dark"] .sidebar              { background: #0a0a0a; border-right: 1px solid #1e1e1e; }
-[data-theme="dark"] .sidebar__section-label { color: #374151; }
+/* Sidebar — matches blue-purple gradient theme */
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] aside,
+[data-theme="dark"] [class*="sidebar"] {
+  background-color: #080818 !important;
+  background-image: radial-gradient(ellipse at 0% 100%, rgba(59,130,246,.06) 0%, transparent 60%) !important;
+  border-right: 1px solid rgba(255,255,255,.05) !important;
+}
+[data-theme="dark"] .sidebar__section-label { color: #3d3d5c !important; }
 
 /* Desktop header */
 [data-theme="dark"] .dash-header          { background: #1a1a1a; border-color: #2a2a2a; }

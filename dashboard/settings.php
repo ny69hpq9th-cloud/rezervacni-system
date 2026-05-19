@@ -35,32 +35,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $logoPath = null;
         if (!empty($_FILES['logo']['name']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
+            error_log('[LOGO UPLOAD] File received: ' . $_FILES['logo']['name'] . ', size: ' . $_FILES['logo']['size'] . ', tmp: ' . $_FILES['logo']['tmp_name']);
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime  = finfo_file($finfo, $_FILES['logo']['tmp_name']);
             finfo_close($finfo);
             $allowed = ['image/jpeg','image/png','image/gif','image/svg+xml','image/webp'];
             if (!in_array($mime, $allowed)) {
                 $errors[] = __('dash.err_logo_type');
+                error_log('[LOGO UPLOAD] MIME type rejected: ' . $mime);
             } elseif ($_FILES['logo']['size'] > 2 * 1024 * 1024) {
                 $errors[] = __('dash.err_logo_size');
+                error_log('[LOGO UPLOAD] File too large: ' . $_FILES['logo']['size']);
             } else {
                 $ext       = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
                 $filename  = 'logo_' . $uid . '_' . time() . '.' . $ext;
                 $uploadDir = __DIR__ . '/../uploads/logos/';
+                error_log('[LOGO UPLOAD] Upload dir: ' . $uploadDir . ', exists: ' . (is_dir($uploadDir) ? 'yes' : 'no') . ', writable: ' . (is_writable(dirname($uploadDir)) ? 'yes' : 'no'));
                 if (!is_dir($uploadDir)) {
                     if (!mkdir($uploadDir, 0755, true)) {
-                        $errors[] = 'Nelze vytvořit složku pro nahrávání. Kontaktujte podporu.';
+                        $errors[] = 'Nelze vytvořit složku pro nahrávání. Zkontrolujte oprávnění na Hostingeru (/uploads/).';
+                        error_log('[LOGO UPLOAD] mkdir FAILED for: ' . $uploadDir);
+                    } else {
+                        error_log('[LOGO UPLOAD] mkdir OK: ' . $uploadDir);
                     }
                 }
                 if (empty($errors)) {
                     $dest = $uploadDir . $filename;
                     if (move_uploaded_file($_FILES['logo']['tmp_name'], $dest)) {
                         $logoPath = '/uploads/logos/' . $filename;
+                        error_log('[LOGO UPLOAD] SUCCESS: ' . $dest);
                     } else {
-                        $errors[] = 'Nahrávání souboru selhalo. Zkontrolujte oprávnění složky /uploads/.';
+                        $errors[] = 'Nahrávání souboru selhalo. Zkontrolujte oprávnění složky /uploads/logos/ na Hostingeru (musí být 755).';
+                        error_log('[LOGO UPLOAD] move_uploaded_file FAILED: tmp=' . $_FILES['logo']['tmp_name'] . ', dest=' . $dest);
                     }
                 }
             }
+        } elseif (!empty($_FILES['logo']['name']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
+            error_log('[LOGO UPLOAD] Upload error code: ' . ($_FILES['logo']['error'] ?? 'n/a'));
         }
 
         if (empty($errors)) {
@@ -198,8 +209,8 @@ require __DIR__ . '/_layout.php';
       <div class="dash-card">
         <div class="dash-card__header"><div class="dash-card__title"><?= __('dash.url_section') ?></div></div>
         <div class="dash-card__body">
-          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;word-break:break-all">
-            <a href="<?= e(PLATFORM_URL . '/rezervace/' . $user['slug']) ?>" target="_blank" style="color:#2563eb;font-size:.875rem">
+          <div class="url-box" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;word-break:break-all">
+            <a href="<?= e(PLATFORM_URL . '/rezervace/' . $user['slug']) ?>" target="_blank" class="url-box__link" style="color:#2563eb;font-size:.875rem">
               <?= e(PLATFORM_URL . '/rezervace/' . $user['slug']) ?>
             </a>
           </div>

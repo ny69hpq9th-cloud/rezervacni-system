@@ -6,6 +6,7 @@
  *   https://vasedomena.cz/api/stripe_webhook.php
  *
  * Sledované události:
+ *   - customer.subscription.created       ← orphan-detection (user must exist)
  *   - customer.subscription.trial_will_end
  *   - invoice.payment_succeeded
  *   - invoice.payment_failed
@@ -64,6 +65,55 @@ $type = $event['type'];
 
 try {
     switch ($type) {
+
+        // ----------------------------------------------------------
+        // Nové předplatné vytvořeno — zkontroluj, že uživatel v DB existuje.
+        // Pokud ne, jde o "orphan" subscription (registrace selhala po Stripe
+        // volání) → zaloguj CRITICAL a pošli admin email.
+        // ----------------------------------------------------------
+        case 'customer.subscription.created':
+            $customerId     = $obj['customer'];
+            $subscriptionId = $obj['id'];
+            $user = getUserByCustomer($db, $customerId);
+
+            if (!$user) {
+                // Pokus najít uživatele přes stripe_subscription_id (race condition fix)
+                $stmt = $db->prepare("SELECT * FROM users WHERE stripe_subscription_id = ?");
+                $stmt->execute([$subscriptionId]);
+                $user = $stmt->fetch() ?: null;
+            }
+
+            if (!$user) {
+                // Orphan subscription — uživatel není v DB!
+                $msg = '[STRIPE CRITICAL] customer.subscription.created: No DB user for '
+                     . 'customer=' . $customerId . ', subscription=' . $subscriptionId
+                     . '. Registration may have failed AFTER Stripe call. Manual review needed.';
+                error_log($msg);
+
+                // Pošli admin email
+                try {
+                    $body = emailTemplate('⚠️ Orphan Stripe subscription detected', "
+                        <p>Byl vytvořen Stripe zákazník a předplatné, ale v databázi neexistuje odpovídající uživatel.</p>
+                        <p><strong>Customer ID:</strong> " . htmlspecialchars($customerId) . "<br>
+                        <strong>Subscription ID:</strong> " . htmlspecialchars($subscriptionId) . "</p>
+                        <p>Zkontrolujte Stripe dashboard a PHP error log pro více informací.<br>
+                        Zvažte zrušení předplatného nebo manuální vytvoření uživatele.</p>
+                        <p style='color:#6b7280;font-size:13px'>Tato zpráva byla vygenerována automaticky webhookem " . PLATFORM_NAME . ".</p>
+                    ");
+                    sendMail(ADMIN_EMAIL, '[' . PLATFORM_NAME . '] ⚠️ Orphan Stripe subscription – akce vyžadována', $body);
+                } catch (Exception $mailEx) {
+                    error_log('[STRIPE CRITICAL] Failed to send admin alert email: ' . $mailEx->getMessage());
+                }
+
+            } else {
+                // Uživatel existuje — ujisti se, že má subscription ID uložené
+                if (empty($user['stripe_subscription_id'])) {
+                    $db->prepare("UPDATE users SET stripe_subscription_id=? WHERE id=?")
+                       ->execute([$subscriptionId, $user['id']]);
+                    error_log('[STRIPE] customer.subscription.created: Updated subscription ID for user #' . $user['id']);
+                }
+            }
+            break;
 
         // ----------------------------------------------------------
         // Trial se blíží ke konci — 3 dny před koncem

@@ -184,6 +184,142 @@
 /* Nav buttons */
 .booking-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
 
+/* ============================================================
+   DARK MODE — BOOKING PAGE
+   ============================================================ */
+[data-theme="dark"] .booking-page {
+  background: #0a0a1a;
+}
+
+/* Header */
+[data-theme="dark"] .booking-header {
+  background: rgba(8,8,28,.95);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+[data-theme="dark"] .booking-header__name { color: #d0d0f0; }
+[data-theme="dark"] .booking-header__desc { color: #7070a0; }
+[data-theme="dark"] .booking-header__badge {
+  background: rgba(5,150,105,.12);
+  color: #34d399;
+}
+
+/* Steps bar */
+[data-theme="dark"] .booking-steps {
+  background: rgba(8,8,28,.95);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+[data-theme="dark"] .booking-step:not(:last-child)::after {
+  background: rgba(255,255,255,.08);
+}
+/* Inactive step number */
+[data-theme="dark"] .booking-step__num {
+  background: #222240;
+  color: #555577;
+}
+/* Active step */
+[data-theme="dark"] .booking-step.active .booking-step__num {
+  background: var(--accent, #2563eb);
+  color: #fff;
+}
+/* Done step */
+[data-theme="dark"] .booking-step.done .booking-step__num {
+  background: #059669;
+  color: #fff;
+}
+/* Labels */
+[data-theme="dark"] .booking-step__label { color: #555577; }
+[data-theme="dark"] .booking-step.active .booking-step__label { color: #d0d0f0; }
+[data-theme="dark"] .booking-step.done  .booking-step__label { color: #34d399; }
+
+/* Service cards */
+[data-theme="dark"] .service-item {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .service-item:hover {
+  border-color: var(--accent, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+[data-theme="dark"] .service-item.selected {
+  background: rgba(37,99,235,.08);
+  border-color: var(--accent, #2563eb);
+}
+[data-theme="dark"] .service-item__name  { color: #d0d0f0; }
+[data-theme="dark"] .service-item__meta-tag { color: #7070a0; }
+[data-theme="dark"] .service-item__desc  { color: #7070a0; }
+[data-theme="dark"] .service-item__check { border-color: rgba(255,255,255,.15); }
+
+/* Mini calendar */
+[data-theme="dark"] .mini-cal {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .mini-cal__title { color: #d0d0f0; }
+[data-theme="dark"] .mini-cal__btn {
+  background: rgba(255,255,255,.06);
+  color: #7070a0;
+}
+[data-theme="dark"] .mini-cal__btn:hover { background: rgba(255,255,255,.1); color: #d0d0f0; }
+[data-theme="dark"] .mini-cal__grid th  { color: #555577; }
+[data-theme="dark"] .mini-cal__day      { color: #b0b0cc; }
+[data-theme="dark"] .mini-cal__day.other-month    { color: #333355; }
+[data-theme="dark"] .mini-cal__day:disabled       { color: #333355; }
+[data-theme="dark"] .mini-cal__day.unavailable    { color: #333355; }
+[data-theme="dark"] .mini-cal__day:hover:not(:disabled) {
+  background: rgba(37,99,235,.12);
+  color: #93c5fd;
+}
+[data-theme="dark"] .mini-cal__day.today  { color: #93c5fd; }
+[data-theme="dark"] .mini-cal__day.selected { background: var(--accent,#2563eb); color: #fff; }
+
+/* Time slots */
+[data-theme="dark"] .time-slots {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .time-slots__title { color: #d0d0f0; }
+[data-theme="dark"] .time-slots__date  { color: #7070a0; }
+[data-theme="dark"] .time-slot {
+  background: transparent;
+  border-color: rgba(255,255,255,.1);
+  color: #b0b0cc;
+}
+[data-theme="dark"] .time-slot:hover {
+  border-color: var(--accent,#2563eb);
+  color: #93c5fd;
+  background: rgba(37,99,235,.08);
+}
+[data-theme="dark"] .time-slot.selected {
+  background: var(--accent,#2563eb);
+  border-color: var(--accent,#2563eb);
+  color: #fff;
+}
+[data-theme="dark"] .time-slots__empty  { color: #555577; }
+[data-theme="dark"] .spinner { border-color: rgba(255,255,255,.1); border-top-color: var(--accent,#2563eb); }
+
+/* Contact form card */
+[data-theme="dark"] .booking-form-card {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .booking-summary {
+  background: rgba(37,99,235,.08);
+  border-color: rgba(37,99,235,.3);
+}
+[data-theme="dark"] .booking-summary__label { color: #7070a0; }
+[data-theme="dark"] .booking-summary__value { color: #d0d0f0; }
+
+/* Confirmation */
+[data-theme="dark"] .booking-confirm {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .booking-confirm__icon { background: rgba(5,150,105,.12); }
+[data-theme="dark"] .booking-confirm__icon svg { color: #34d399; }
+[data-theme="dark"] .booking-confirm__title { color: #d0d0f0; }
+[data-theme="dark"] .booking-confirm__sub   { color: #7070a0; }
+[data-theme="dark"] .booking-confirm__details { background: rgba(255,255,255,.03); }
+
 /* Responsive */
 @media (max-width: 640px) {
   .booking-steps__inner { gap: 0; }

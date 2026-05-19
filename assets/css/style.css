@@ -822,3 +822,282 @@ html[data-theme="dark"] input::placeholder,
 html[data-theme="dark"] textarea::placeholder {
   color: #555555 !important;
 }
+
+/* URL box (rezervační odkaz v nastavení) */
+html[data-theme="dark"] .url-box {
+  background-color: #1a1a2e !important;
+  border-color: #2a2a4a !important;
+}
+html[data-theme="dark"] .url-box__link {
+  color: #8888ff !important;
+}
+html[data-theme="dark"] input[readonly] {
+  background-color: #1a1a2e !important;
+  border-color: #2a2a4a !important;
+  color: #8888ff !important;
+}
+
+/* ============================================================
+   DARK MODE — DASHBOARD (overrides dashboard.css flat grays
+   with the same blue-purple gradient theme as the main page)
+   html[data-theme="dark"] has higher specificity than
+   [data-theme="dark"] in dashboard.css so these always win.
+   ============================================================ */
+
+/* Wrapper — main gradient background */
+html[data-theme="dark"] .dash-wrapper {
+  background-color: #0a0a1a !important;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,.08) 0%, transparent 50%) !important;
+}
+
+/* Main content area — transparent so wrapper gradient shows through */
+html[data-theme="dark"] .dash-main {
+  background: transparent !important;
+}
+html[data-theme="dark"] .dash-content {
+  background: transparent !important;
+}
+
+/* Sidebar */
+html[data-theme="dark"] aside,
+html[data-theme="dark"] .sidebar,
+html[data-theme="dark"] .nav-sidebar,
+html[data-theme="dark"] .dashboard-sidebar,
+html[data-theme="dark"] [class*="sidebar"],
+html[data-theme="dark"] nav.dashboard-nav {
+  background-color: #080818 !important;
+  background-image: radial-gradient(ellipse at 0% 100%, rgba(59,130,246,.06) 0%, transparent 60%) !important;
+  border-right: 1px solid rgba(255,255,255,.05) !important;
+}
+html[data-theme="dark"] .sidebar__section-label {
+  color: #3d3d5c !important;
+}
+html[data-theme="dark"] .sidebar__link {
+  color: #8888aa !important;
+}
+html[data-theme="dark"] .sidebar__link:hover {
+  background: rgba(59,130,246,.08) !important;
+  color: #c8c8e8 !important;
+}
+html[data-theme="dark"] .sidebar__link.active {
+  background: rgba(59,130,246,.13) !important;
+  color: #93c5fd !important;
+}
+html[data-theme="dark"] .sidebar__user-name {
+  color: #ccccdd !important;
+}
+html[data-theme="dark"] .sidebar__user-plan {
+  color: #555577 !important;
+}
+html[data-theme="dark"] .sidebar__logout {
+  color: #555577 !important;
+}
+html[data-theme="dark"] .sidebar__logout:hover {
+  color: #8888aa !important;
+}
+
+/* Desktop header bar */
+html[data-theme="dark"] .dash-header {
+  background-color: rgba(8,8,28,.95) !important;
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+  backdrop-filter: blur(8px);
+}
+html[data-theme="dark"] .dash-header__title {
+  color: #d0d0f0 !important;
+}
+
+/* Mobile header bar */
+html[data-theme="dark"] .dash-mobile-header {
+  background-color: rgba(8,8,28,.95) !important;
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+}
+html[data-theme="dark"] .dash-mobile-header__logo {
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] .dash-hamburger {
+  color: #d0d0f0 !important;
+}
+
+/* Stat cards */
+html[data-theme="dark"] .stat-card {
+  background-color: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+}
+html[data-theme="dark"] .stat-card__label {
+  color: #7070a0 !important;
+}
+html[data-theme="dark"] .stat-card__value {
+  color: #e0e0ff !important;
+}
+html[data-theme="dark"] .stat-card__sub {
+  color: #555577 !important;
+}
+html[data-theme="dark"] .stat-card__icon--blue   { background: rgba(37,99,235,.12) !important; }
+html[data-theme="dark"] .stat-card__icon--green  { background: rgba(5,150,105,.12) !important; }
+html[data-theme="dark"] .stat-card__icon--yellow { background: rgba(217,119,6,.12) !important; }
+html[data-theme="dark"] .stat-card__icon--purple { background: rgba(124,58,237,.12) !important; }
+
+/* Dash cards */
+html[data-theme="dark"] .dash-card {
+  background-color: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+}
+html[data-theme="dark"] .dash-card__header {
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .dash-card__title {
+  color: #d0d0f0 !important;
+}
+
+/* Data table */
+html[data-theme="dark"] .data-table th {
+  background: rgba(255,255,255,.025) !important;
+  color: #7070a0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .data-table td {
+  border-bottom: 1px solid rgba(255,255,255,.04) !important;
+  color: #b0b0cc !important;
+}
+html[data-theme="dark"] .data-table tr:hover td {
+  background: rgba(255,255,255,.03) !important;
+}
+html[data-theme="dark"] .data-table__empty {
+  color: #555577 !important;
+}
+
+/* Modal */
+html[data-theme="dark"] .modal {
+  background-color: #0e0e24 !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,.7) !important;
+}
+html[data-theme="dark"] .modal__header {
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .modal__footer {
+  border-top: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .modal__close {
+  color: #555577 !important;
+}
+html[data-theme="dark"] .modal__close:hover {
+  background: rgba(255,255,255,.06) !important;
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] .detail-row {
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+}
+html[data-theme="dark"] .detail-row__label { color: #7070a0 !important; }
+html[data-theme="dark"] .detail-row__value { color: #d0d0f0 !important; }
+
+/* Service cards */
+html[data-theme="dark"] .service-card {
+  background-color: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+}
+html[data-theme="dark"] .service-card__name   { color: #d0d0f0 !important; }
+html[data-theme="dark"] .service-card__meta-item { color: #7070a0 !important; }
+html[data-theme="dark"] .service-card__desc   { color: #7070a0 !important; }
+
+/* Calendar */
+html[data-theme="dark"] .cal-grid th { color: #7070a0 !important; }
+html[data-theme="dark"] .cal-day {
+  background: rgba(255,255,255,.025) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .cal-day:hover {
+  border-color: rgba(59,130,246,.4) !important;
+}
+html[data-theme="dark"] .cal-day.other-month {
+  background: rgba(255,255,255,.01) !important;
+}
+html[data-theme="dark"] .cal-day.other-month .cal-day__num { color: #333355 !important; }
+html[data-theme="dark"] .cal-day__num { color: #d0d0f0 !important; }
+html[data-theme="dark"] .view-tabs {
+  background: rgba(255,255,255,.04) !important;
+}
+html[data-theme="dark"] .view-tab { color: #7070a0 !important; }
+html[data-theme="dark"] .view-tab.active {
+  background: rgba(255,255,255,.07) !important;
+  color: #d0d0f0 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4) !important;
+}
+
+/* Subscription / plan cards */
+html[data-theme="dark"] .plan-card {
+  background-color: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+}
+html[data-theme="dark"] .plan-card--active {
+  background-color: rgba(37,99,235,.08) !important;
+  border-color: rgba(37,99,235,.4) !important;
+}
+html[data-theme="dark"] .trial-bar {
+  background: rgba(217,119,6,.08) !important;
+  border-color: rgba(120,53,15,.4) !important;
+}
+html[data-theme="dark"] .trial-bar p { color: #fcd34d !important; }
+
+/* Settings */
+html[data-theme="dark"] .settings-nav-link {
+  color: #7070a0 !important;
+}
+html[data-theme="dark"] .settings-nav-link:hover {
+  background: rgba(255,255,255,.05) !important;
+  color: #d0d0f0 !important;
+}
+html[data-theme="dark"] .settings-nav-link.active {
+  background: rgba(37,99,235,.1) !important;
+  color: #93c5fd !important;
+}
+html[data-theme="dark"] .form-section-title {
+  color: #7070a0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .logo-upload-area {
+  border-color: rgba(255,255,255,.1) !important;
+}
+html[data-theme="dark"] .logo-upload-area:hover {
+  border-color: rgba(37,99,235,.5) !important;
+}
+
+/* Working hours table */
+html[data-theme="dark"] .hours-row {
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+}
+html[data-theme="dark"] .hours-row__day { color: #b0b0cc !important; }
+
+/* Breadcrumb */
+html[data-theme="dark"] .breadcrumb { color: #555577 !important; }
+html[data-theme="dark"] .breadcrumb a { color: #7070a0 !important; }
+html[data-theme="dark"] .breadcrumb a:hover { color: #93c5fd !important; }
+
+/* Empty state */
+html[data-theme="dark"] .empty-state svg { color: #2a2a4a !important; }
+html[data-theme="dark"] .empty-state h3  { color: #d0d0f0 !important; }
+html[data-theme="dark"] .empty-state p   { color: #555577 !important; }
+
+/* Filter bar */
+html[data-theme="dark"] .filter-bar .form-control {
+  background-color: rgba(255,255,255,.04) !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: #b0b0cc !important;
+}
+
+/* Pricing cards (subscription page) */
+html[data-theme="dark"] .pricing-card {
+  background-color: rgba(255,255,255,.03) !important;
+  border-color: rgba(255,255,255,.07) !important;
+}
+html[data-theme="dark"] .pricing-card--popular {
+  background-color: rgba(37,99,235,.08) !important;
+  border-color: rgba(37,99,235,.35) !important;
+}
+
+/* Sidebar overlay (mobile) */
+html[data-theme="dark"] .modal-overlay {
+  background: rgba(0,0,15,.8) !important;
+}
