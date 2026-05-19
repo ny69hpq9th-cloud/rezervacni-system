@@ -557,24 +557,18 @@ select.form-control { cursor: pointer; }
   background: #0a0a0a;
 }
 
-/* ============================================================
-   THEME TOGGLE BUTTON
-   ============================================================ */
-.theme-toggle {
-  display: flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border-radius: 8px;
-  background: var(--bg-secondary); border: 1px solid var(--border);
-  cursor: pointer; color: var(--text-secondary); padding: 0; flex-shrink: 0;
-  transition: background var(--transition), color var(--transition), border-color var(--transition);
+/* Explicit body background + text */
+[data-theme="dark"] body {
+  background: #0f0f0f;
+  color: #ffffff;
 }
-.theme-toggle:hover { color: var(--text); background: var(--border); }
-.theme-toggle svg { width: 18px; height: 18px; display: block; pointer-events: none; }
 
-/* Show moon in light mode, sun in dark mode */
-.theme-toggle .icon-sun  { display: none; }
-.theme-toggle .icon-moon { display: block; }
-[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
-[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+/* Cards */
+[data-theme="dark"] .card,
+[data-theme="dark"] .feature-card {
+  background: #1e1e1e;
+  border-color: #2a2a2a;
+}
 
 /* ============================================================
    SMOOTH THEME TRANSITION (applied after first paint)

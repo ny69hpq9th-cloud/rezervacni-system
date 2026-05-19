@@ -134,6 +134,7 @@ function langSwitcher(string $extraClass = ''): string {
  */
 function themeHeadScript(): string {
     return '<script>'
+        /* 1. Anti-FOUC — set data-theme before CSS renders */
         . '(function(){'
         .   'try{'
         .     'var t=localStorage.getItem("rezervly_theme");'
@@ -141,32 +142,30 @@ function themeHeadScript(): string {
         .     'document.documentElement.setAttribute("data-theme",p);'
         .   '}catch(e){}'
         . '})();'
+        /* 2. Toggle function */
         . 'function toggleTheme(){'
         .   'var h=document.documentElement;'
-        .   'var n=h.getAttribute("data-theme")==="dark"?"light":"dark";'
-        .   'h.setAttribute("data-theme",n);'
-        .   'try{localStorage.setItem("rezervly_theme",n);}catch(e){}'
+        .   'var isDark=h.getAttribute("data-theme")==="dark";'
+        .   'var next=isDark?"light":"dark";'
+        .   'h.setAttribute("data-theme",next);'
+        .   'try{localStorage.setItem("rezervly_theme",next);}catch(e){}'
+        .   'var btn=document.getElementById("theme-toggle");'
+        .   'if(btn)btn.textContent=next==="dark"?"☀️":"🌙";'
         . '}'
-        . 'window.addEventListener("load",function(){'
+        /* 3. After DOM ready: sync emoji icon + enable smooth transitions */
+        . 'document.addEventListener("DOMContentLoaded",function(){'
+        .   'var t=document.documentElement.getAttribute("data-theme");'
+        .   'var btn=document.getElementById("theme-toggle");'
+        .   'if(btn)btn.textContent=t==="dark"?"☀️":"🌙";'
         .   'document.documentElement.classList.add("theme-ready");'
         . '});'
         . '</script>' . "\n";
 }
 
 /**
- * Dark/light mode toggle button.
+ * Dark/light mode toggle button (emoji, no CSS dependency).
  */
 function themeToggle(): string {
-    return '<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">'
-        . '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-        . '<circle cx="12" cy="12" r="5"/>'
-        . '<line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>'
-        . '<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>'
-        . '<line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>'
-        . '<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
-        . '</svg>'
-        . '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-        . '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>'
-        . '</svg>'
-        . '</button>';
+    return '<button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"'
+        . ' style="background:none;border:none;cursor:pointer;padding:4px 8px;font-size:18px;line-height:1;vertical-align:middle;">🌙</button>';
 }
