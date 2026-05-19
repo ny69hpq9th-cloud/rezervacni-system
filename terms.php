@@ -28,6 +28,7 @@ $trial    = TRIAL_DAYS;
 <link rel="alternate" hreflang="cs" href="<?= e(PLATFORM_URL) ?>/terms.php?setlang=cs">
 <link rel="alternate" hreflang="en" href="<?= e(PLATFORM_URL) ?>/terms.php?setlang=en">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script src="/assets/js/theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css">
@@ -68,6 +69,7 @@ footer{background:#1e293b;color:#94a3b8;padding:32px 24px}
     <a href="/" class="topnav__brand">Rezervly<span>.</span></a>
     <div class="topnav__spacer"></div>
     <?= langSwitcher() ?>
+    <?= themeToggle() ?>
     <a href="/login.php" class="topnav__link" style="margin-left:8px">
       <?= $en ? 'Sign in' : 'Přihlásit se' ?>
     </a>

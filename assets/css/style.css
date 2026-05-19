@@ -487,3 +487,98 @@ select.form-control { cursor: pointer; }
 .align-center { align-items: center; }
 .justify-between { justify-content: space-between; }
 .fw-600 { font-weight: 600; }
+
+/* ============================================================
+   DARK MODE — CSS variable overrides
+   ============================================================ */
+[data-theme="dark"] {
+  --bg:             #0f0f0f;
+  --bg-secondary:   #1a1a1a;
+  --surface:        #1e1e1e;
+  --border:         #2a2a2a;
+
+  --text:           #f1f5f9;
+  --text-secondary: #a0a0a0;
+  --text-muted:     #6b7280;
+
+  --shadow:    0 1px 3px rgba(0,0,0,.4),  0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 6px  rgba(0,0,0,.5), 0 2px 4px  rgba(0,0,0,.4);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,.5),0 4px  6px  rgba(0,0,0,.3);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,.6),0 10px 10px rgba(0,0,0,.4);
+}
+
+/* Navigation */
+[data-theme="dark"] .nav {
+  background: rgba(15,15,15,.92);
+}
+
+/* Sticky nav border adapts via --border */
+
+/* Buttons — lang switcher active pill */
+[data-theme="dark"] .lang-btn--active {
+  background: #3a3a3a;
+  box-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+
+/* Hero gradient */
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #0a1628 0%, #0f0f0f 55%, #12082a 100%);
+}
+[data-theme="dark"] .hero::before {
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(37,99,235,.18), transparent);
+}
+
+/* Alerts */
+[data-theme="dark"] .alert--success { background: #052e1c; color: #6ee7b7; border-color: #064e30; }
+[data-theme="dark"] .alert--error   { background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }
+[data-theme="dark"] .alert--warning { background: #2d1a00; color: #fcd34d; border-color: #78350f; }
+[data-theme="dark"] .alert--info    { background: #0a1628; color: #93c5fd; border-color: #1e3a8a; }
+
+/* Badges */
+[data-theme="dark"] .badge--success { background: #052e1c; color: #34d399; }
+[data-theme="dark"] .badge--warning { background: #2d1a00; color: #fbbf24; }
+[data-theme="dark"] .badge--danger  { background: #2d0a0a; color: #f87171; }
+[data-theme="dark"] .badge--info    { background: #0a1628; color: #60a5fa; }
+
+/* Mobile nav */
+[data-theme="dark"] .nav--open .nav__links {
+  background: #1a1a1a;
+}
+
+/* Footer — uses var(--text) as bg which flips to white in dark mode */
+[data-theme="dark"] .footer {
+  background: #080808;
+}
+
+/* Register CTA section stays gradient, no override needed */
+
+/* Auth pages */
+[data-theme="dark"] .auth-page {
+  background: #0a0a0a;
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  cursor: pointer; color: var(--text-secondary); padding: 0; flex-shrink: 0;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.theme-toggle:hover { color: var(--text); background: var(--border); }
+.theme-toggle svg { width: 18px; height: 18px; display: block; pointer-events: none; }
+
+/* Show moon in light mode, sun in dark mode */
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ============================================================
+   SMOOTH THEME TRANSITION (applied after first paint)
+   ============================================================ */
+.theme-ready * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease !important;
+}

@@ -109,6 +109,7 @@ $bizTypes = __array('reg.biz_types');
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
+<script src="/assets/js/theme.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= __('reg.page_title') ?> – <?= e(PLATFORM_TITLE) ?></title>
 <?php renderSeoHead([
@@ -207,7 +208,7 @@ $bizTypes = __array('reg.biz_types');
     <div class="reg-form-wrap">
       <div class="reg-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit"><?= logoIcon('color') ?><span style="font-weight:800;font-size:1.15rem"><?= e($pname) ?></span></a>
-        <?= langSwitcher() ?>
+        <div style="display:flex;align-items:center;gap:8px"><?= langSwitcher() ?><?= themeToggle() ?></div>
       </div>
       <h1 class="reg-title"><?= __('reg.form_title') ?></h1>
       <p class="reg-subtitle"><?= __('reg.form_sub') ?></p>

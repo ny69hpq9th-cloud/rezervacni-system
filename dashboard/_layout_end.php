@@ -22,6 +22,8 @@ toggle?.addEventListener('click', () => {
 });
 overlay?.addEventListener('click', closeSidebar);
 
+requestAnimationFrame(function(){document.documentElement.classList.add('theme-ready');});
+
 // Auto-hide alerts
 document.querySelectorAll('.alert').forEach(el => {
   setTimeout(() => {

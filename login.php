@@ -37,6 +37,7 @@ $flash = getFlash();
 <html lang="<?= htmlLang() ?>">
 <head>
 <meta charset="UTF-8">
+<script src="/assets/js/theme.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= __('auth.login_title') ?> – <?= e(PLATFORM_TITLE) ?></title>
 <?php renderSeoHead([
@@ -60,7 +61,7 @@ $flash = getFlash();
   <div class="auth-card">
     <div class="auth-logo">
       <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit"><?= logoIcon('color') ?><span style="font-weight:800;font-size:1.15rem"><?= e($pname) ?></span></a>
-      <?= langSwitcher('ms-auto') ?>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:auto"><?= langSwitcher() ?><?= themeToggle() ?></div>
     </div>
     <div class="card" style="padding:40px">
       <h1 class="auth-title"><?= __('auth.login_title') ?></h1>
