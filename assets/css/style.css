@@ -597,11 +597,6 @@ select.form-control { cursor: pointer; }
 
 /* Register CTA section stays gradient, no override needed */
 
-/* Auth pages */
-[data-theme="dark"] .auth-page {
-  background: #0a0a0a;
-}
-
 /* Explicit body background + text */
 [data-theme="dark"] body {
   background: #0f0f0f;
@@ -633,11 +628,24 @@ html[data-theme="dark"] body {
                     radial-gradient(ellipse at 80% 20%, rgba(139,92,246,.08) 0%, transparent 50%) !important;
   color: #cccccc !important;
 }
+/* All layout wrappers transparent → body gradient shows through everywhere */
+html[data-theme="dark"] .reg-page,
 html[data-theme="dark"] .reg-left,
+html[data-theme="dark"] .reg-right,
 html[data-theme="dark"] .register-left,
-html[data-theme="dark"] .auth-left {
-  background-color: #0a0a1a !important;
-  background-image: radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.1) 0%, transparent 60%) !important;
+html[data-theme="dark"] .auth-left,
+html[data-theme="dark"] .auth-page {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+/* Form card surfaces — subtle elevation above gradient */
+html[data-theme="dark"] .auth-card .card {
+  background: rgba(255,255,255,.04) !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+html[data-theme="dark"] .reg-form-wrap {
+  background: transparent !important;
 }
 html[data-theme="dark"] nav,
 html[data-theme="dark"] header,
@@ -737,9 +745,9 @@ html[data-theme="dark"] .benefit__icon {
 html[data-theme="dark"] .benefit__text span {
   color: #888888 !important;
 }
-/* Right panel background */
+/* Right panel — transparent, inherits body gradient */
 html[data-theme="dark"] .reg-right {
-  background-color: #0f0f0f !important;
+  background: transparent !important;
 }
 /* Logo + title + subtitle */
 html[data-theme="dark"] .reg-logo,
