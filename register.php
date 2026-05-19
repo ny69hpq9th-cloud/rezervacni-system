@@ -252,16 +252,18 @@ $bizTypes = __array('reg.biz_types');
                 <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
               </button>
             </div>
-            <div id="pw-strength-wrap" style="display:none;margin-top:6px">
-              <div style="height:4px;border-radius:2px;background:#e2e8f0;overflow:hidden">
-                <div id="pw-strength-fill" style="height:100%;width:0;border-radius:2px;transition:width .25s,background .25s"></div>
+            <div id="pw-strength-wrap" style="display:none;margin-top:5px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="flex:1;height:4px;border-radius:4px;background:#e2e8f0;overflow:hidden">
+                  <div id="pw-strength-fill" style="height:100%;width:0;border-radius:4px;transition:width .25s,background .25s"></div>
+                </div>
+                <span id="pw-strength-label" style="font-size:.7rem;white-space:nowrap;min-width:56px;text-align:right"></span>
               </div>
-              <span id="pw-strength-label" style="font-size:.72rem;margin-top:4px;display:block"></span>
-              <ul id="pw-criteria" style="list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">
-                <li id="pc-len"  style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Min. 8 characters' : 'Minimálně 8 znaků' ?></li>
-                <li id="pc-num"  style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Number (0–9)' : 'Číslo (0–9)' ?></li>
-                <li id="pc-up"   style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Uppercase (A–Z)' : 'Velké písmeno (A–Z)' ?></li>
-                <li id="pc-spec" style="font-size:.72rem;color:#ef4444">&times; <?= currentLang() === 'en' ? 'Special char (!@#…)' : 'Speciální znak (!@#…)' ?></li>
+              <ul id="pw-criteria" style="list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:1px">
+                <li id="pc-len"  style="font-size:.72rem;color:#666">&times; <?= currentLang() === 'en' ? 'Min. 8 characters' : 'Min. 8 znaků' ?></li>
+                <li id="pc-up"   style="font-size:.72rem;color:#666">&times; <?= currentLang() === 'en' ? 'Uppercase letter' : 'Velké písmeno' ?></li>
+                <li id="pc-num"  style="font-size:.72rem;color:#666">&times; <?= currentLang() === 'en' ? 'Number' : 'Číslo' ?></li>
+                <li id="pc-spec" style="font-size:.72rem;color:#666">&times; <?= currentLang() === 'en' ? 'Special char' : 'Speciální znak' ?></li>
               </ul>
             </div>
           </div>
@@ -492,8 +494,8 @@ function togglePw(btn) {
   }
 
   var criteriaLabels = isEn
-    ? { len: 'Min. 8 characters', up: 'Uppercase (A–Z)', num: 'Number (0–9)', spec: 'Special char (!@#…)' }
-    : { len: 'Minimálně 8 znaků', up: 'Velké písm. (A–Z)', num: 'Číslo (0–9)', spec: 'Speciální znak (!@#…)' };
+    ? { len: 'Min. 8 characters', up: 'Uppercase letter', num: 'Number', spec: 'Special char' }
+    : { len: 'Min. 8 znaků', up: 'Velké písmeno', num: 'Číslo', spec: 'Speciální znak' };
 
   pwInput.addEventListener('input', function() {
     var val = this.value;
