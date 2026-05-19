@@ -219,6 +219,9 @@ return [
             'login'    => 'Přihlášení',
             'rights'   => 'Všechna práva vyhrazena.',
             'made_for' => 'Vytvořeno s ❤ pro podnikatele',
+            'privacy'  => 'Ochrana osobních údajů',
+            'terms'    => 'Obchodní podmínky',
+            'cookies'  => 'Cookies',
         ],
     ],
 

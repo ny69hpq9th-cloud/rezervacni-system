@@ -377,12 +377,17 @@ foreach ($seoSchemas as $schema) {
       </div>
     </div>
     <div class="footer__bottom">
-      <div>© <?= date('Y') ?> <?= e($pname) ?>. <?= __('index.footer.rights') ?></div>
-      <div><?= __('index.footer.made_for') ?></div>
+      <div>© <?= date('Y') ?> <?= e($pname) ?> &bull; Oliver Hlavnička &bull; IČO: 29521939</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="/privacy-policy.php" style="color:inherit;text-decoration:none;opacity:.7"><?= __('index.footer.privacy') ?></a>
+        <a href="/terms.php"          style="color:inherit;text-decoration:none;opacity:.7"><?= __('index.footer.terms') ?></a>
+        <a href="/cookies.php"        style="color:inherit;text-decoration:none;opacity:.7"><?= __('index.footer.cookies') ?></a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script src="/assets/js/main.js"></script>
+<?php require_once __DIR__ . '/includes/cookie-banner.php'; ?>
 </body>
 </html>

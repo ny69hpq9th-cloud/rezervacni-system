@@ -219,6 +219,9 @@ return [
             'login'    => 'Sign in',
             'rights'   => 'All rights reserved.',
             'made_for' => 'Made with ❤ for business owners',
+            'privacy'  => 'Privacy Policy',
+            'terms'    => 'Terms of Service',
+            'cookies'  => 'Cookies',
         ],
     ],
 
