@@ -618,3 +618,27 @@ html[data-theme="dark"] footer {
   background-color: #080808 !important;
   color: #888888 !important;
 }
+
+/* ============================================================
+   DARK MODE — demo booking widget in hero section
+   ============================================================ */
+html[data-theme="dark"] .booking-demo,
+html[data-theme="dark"] .demo-widget,
+html[data-theme="dark"] .hero-demo,
+html[data-theme="dark"] .mockup,
+html[data-theme="dark"] .browser-mockup {
+  background-color: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+  color: #cccccc !important;
+}
+html[data-theme="dark"] .service-item,
+html[data-theme="dark"] .service-card,
+html[data-theme="dark"] .time-slot {
+  background-color: #222222 !important;
+  border-color: #333333 !important;
+  color: #cccccc !important;
+}
+html[data-theme="dark"] .service-item.selected,
+html[data-theme="dark"] .service-card.active {
+  background-color: #1e3a5f !important;
+}
