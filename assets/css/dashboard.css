@@ -54,6 +54,13 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 0.9rem; font-weight: 700; color: #fff; flex-shrink: 0;
 }
+/* When a real logo image is used as avatar */
+.sidebar__avatar--logo {
+  object-fit: contain;
+  background: #fff;
+  padding: 3px;
+  border-radius: 8px;
+}
 .sidebar__user-name { font-size: 0.875rem; font-weight: 600; color: #f1f5f9; line-height: 1.3; }
 .sidebar__user-plan { font-size: 0.75rem; color: #64748b; }
 .sidebar__logout {
@@ -255,11 +262,11 @@
   margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-weight: 500;
 }
-/* Vivid solid status colours — match badge colours */
-.cal-event--pending   { background: #f59e0b; color: #fff; }
-.cal-event--confirmed { background: #10b981; color: #fff; }
-.cal-event--cancelled { background: #ef4444; color: #fff; }
-.cal-event--completed { background: #3b82f6; color: #fff; }
+/* Vivid solid status colours — !important locks them against any override */
+.cal-event--pending   { background: #f59e0b !important; color: #000 !important; }
+.cal-event--confirmed { background: #10b981 !important; color: #fff !important; }
+.cal-event--cancelled { background: #ef4444 !important; color: #fff !important; }
+.cal-event--completed { background: #3b82f6 !important; color: #fff !important; }
 
 /* View tabs */
 .view-tabs { display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 8px; }
@@ -358,9 +365,38 @@
   /* Subscription plan grid → single column on tablet/mobile */
   .sub-plans-grid { grid-template-columns: 1fr !important; }
 }
+
+@media (max-width: 768px) {
+  /* Subscription plans: stacked, full width, gap 16px */
+  .sub-plans-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .sub-plans-grid > * { width: 100% !important; }
+
+  /* Dashboard layout: allow vertical scroll, no height cap */
+  body  { overflow-y: auto !important; }
+  .dash-main {
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .dash-content {
+    overflow: visible !important;
+    min-height: 0 !important;
+    padding-bottom: 40px;
+  }
+
+  /* Settings form: single column */
+  .settings-form-grid,
+  form > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
-  /* Ensure entire dash-content is reachable by scroll */
   .dash-main { min-height: auto; height: auto; }
 }
 
@@ -463,11 +499,7 @@
 [data-theme="dark"] .view-tab             { color: #a0a0a0; }
 [data-theme="dark"] .view-tab.active      { background: #2a2a2a; color: #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
 
-/* Event badges — same vivid solids in dark mode, slightly muted */
-[data-theme="dark"] .cal-event--pending   { background: #d97706; color: #fff; }
-[data-theme="dark"] .cal-event--confirmed { background: #059669; color: #fff; }
-[data-theme="dark"] .cal-event--cancelled { background: #dc2626; color: #fff; }
-[data-theme="dark"] .cal-event--completed { background: #2563eb; color: #fff; }
+/* Cal events — same vivid colours in dark mode (!important in base rule locks them) */
 
 /* Subscription */
 [data-theme="dark"] .plan-card            { background: #1e1e1e; border-color: #2a2a2a; }

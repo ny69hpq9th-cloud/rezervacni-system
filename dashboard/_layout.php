@@ -44,7 +44,7 @@ function navIcon(string $icon): string {
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css?v=<?php echo time(); ?>">
 <link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -78,7 +78,13 @@ function navIcon(string $icon): string {
   </nav>
   <div class="sidebar__footer">
     <div class="sidebar__user">
-      <div class="sidebar__avatar"><?= e($initials) ?></div>
+      <?php if (!empty($user['logo'])): ?>
+        <img src="<?= e($user['logo']) ?>"
+             alt="<?= e($user['business_name']) ?>"
+             class="sidebar__avatar sidebar__avatar--logo">
+      <?php else: ?>
+        <div class="sidebar__avatar"><?= e($initials) ?></div>
+      <?php endif; ?>
       <div>
         <div class="sidebar__user-name"><?= e($user['business_name']) ?></div>
         <div class="sidebar__user-plan"><?= e($planLabel) ?></div>

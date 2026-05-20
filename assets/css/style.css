@@ -4,10 +4,11 @@
    PREVENT HORIZONTAL SCROLL ON ALL PAGES
    ============================================================ */
 /* Prevent horizontal scroll without breaking iOS vertical scroll.
-   Setting overflow-x:hidden on BOTH html AND body causes iOS Safari to
-   lose its scroll container → page freezes. Only set on body. */
-html  { max-width: 100vw !important; overflow-x: hidden; }
-body  { overflow-x: hidden !important; overflow-y: auto; max-width: 100vw !important; }
+   DO NOT set overflow-x:hidden on html — iOS Safari treats html as the scroll
+   container when any overflow is set on it, which can freeze vertical scroll.
+   Set it ONLY on body, and explicitly allow vertical scrolling. */
+html  { max-width: 100vw; }
+body  { overflow-x: hidden !important; overflow-y: auto !important; max-width: 100vw !important; }
 * { box-sizing: border-box; }
 
 /* ============================================================
@@ -50,7 +51,7 @@ body  { overflow-x: hidden !important; overflow-y: auto; max-width: 100vw !impor
    RESET
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 100%; }
+html { scroll-behavior: smooth; font-size: 16px; max-width: 100%; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
@@ -208,11 +209,17 @@ select.form-control { cursor: pointer; }
   padding: 3px 10px; border-radius: 99px;
   font-size: 0.775rem; font-weight: 600; letter-spacing: .02em;
 }
-/* Vivid solid badges — legible at a glance */
-.badge--success { background: #10b981; color: #fff; }
-.badge--warning { background: #f59e0b; color: #fff; }
-.badge--danger  { background: #ef4444; color: #fff; }
-.badge--info    { background: #3b82f6; color: #fff; }
+/* Vivid solid badges — legible at a glance.
+   !important ensures no other rule (inline style, specificity war) wins.
+   Same colours in light AND dark mode — no separate dark-mode override. */
+.badge--warning,
+.badge-pending,   .status-pending,   [data-status="pending"]   { background-color: #f59e0b !important; color: #000 !important; border: none !important; }
+.badge--success,
+.badge-confirmed, .status-confirmed, [data-status="confirmed"] { background-color: #10b981 !important; color: #fff !important; border: none !important; }
+.badge--info,
+.badge-completed, .status-completed, [data-status="completed"] { background-color: #3b82f6 !important; color: #fff !important; border: none !important; }
+.badge--danger,
+.badge-cancelled, .status-cancelled, [data-status="cancelled"] { background-color: #ef4444 !important; color: #fff !important; border: none !important; }
 .badge--default { background: var(--bg-secondary); color: var(--text-secondary); }
 
 /* ============================================================
@@ -585,11 +592,7 @@ select.form-control { cursor: pointer; }
 [data-theme="dark"] .alert--warning { background: #2d1a00; color: #fcd34d; border-color: #78350f; }
 [data-theme="dark"] .alert--info    { background: #0a1628; color: #93c5fd; border-color: #1e3a8a; }
 
-/* Badges — dark mode keeps solid colors, slightly muted */
-[data-theme="dark"] .badge--success { background: #059669; color: #fff; }
-[data-theme="dark"] .badge--warning { background: #d97706; color: #fff; }
-[data-theme="dark"] .badge--danger  { background: #dc2626; color: #fff; }
-[data-theme="dark"] .badge--info    { background: #2563eb; color: #fff; }
+/* Badges — same vivid colours in dark mode (no override needed, !important locks them) */
 
 /* Mobile nav */
 [data-theme="dark"] .nav--open .nav__links {
