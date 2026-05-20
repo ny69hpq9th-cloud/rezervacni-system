@@ -158,15 +158,18 @@ require __DIR__ . '/_layout.php';
       <div class="dash-card" style="margin-bottom:24px">
         <div class="dash-card__header"><div class="dash-card__title"><?= __('dash.logo_section') ?></div></div>
         <div class="dash-card__body">
-          <?php if (!empty($user['logo'])): ?>
-            <img src="<?= e($user['logo']) ?>" alt="Logo" class="logo-preview" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px;border-radius:8px">
-          <?php endif; ?>
-          <label class="logo-upload-area">
-            <input type="file" name="logo" accept="image/*">
+          <img id="logo-preview-img"
+               src="<?= !empty($user['logo']) ? e($user['logo']) : '' ?>"
+               alt="Logo"
+               class="logo-preview"
+               style="width:80px;height:80px;object-fit:contain;margin-bottom:12px;border-radius:8px;<?= empty($user['logo']) ? 'display:none' : '' ?>">
+          <label class="logo-upload-area" id="logo-upload-area">
+            <input type="file" id="logo-file-input" accept="image/*" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2">
             <div style="font-size:2rem;margin-bottom:8px">🖼️</div>
-            <div style="font-weight:500;margin-bottom:4px"><?= __('dash.logo_upload') ?></div>
+            <div style="font-weight:500;margin-bottom:4px" id="logo-upload-label"><?= __('dash.logo_upload') ?></div>
             <div style="font-size:.8rem;color:#94a3b8"><?= __('dash.logo_types') ?></div>
           </label>
+          <div id="logo-status" style="margin-top:8px;font-size:.85rem;display:none"></div>
         </div>
       </div>
 
@@ -233,5 +236,67 @@ require __DIR__ . '/_layout.php';
     <button type="submit" class="btn btn--primary btn--lg"><?= __('dash.save_settings') ?></button>
   </div>
 </form>
+
+<script>
+(function () {
+  var input    = document.getElementById('logo-file-input');
+  var preview  = document.getElementById('logo-preview-img');
+  var status   = document.getElementById('logo-status');
+  var label    = document.getElementById('logo-upload-label');
+  var csrfEl   = document.querySelector('[name=csrf_token]');
+
+  if (!input) return;
+
+  input.addEventListener('change', function () {
+    var file = input.files[0];
+    if (!file) return;
+
+    // Live preview immediately
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+
+    // Show uploading state
+    setStatus('loading', '<?= addslashes(__('dash.logo_uploading') ?: 'Nahrávám…') ?>');
+    label.textContent = file.name;
+
+    // Build FormData
+    var fd = new FormData();
+    fd.append('logo', file);
+    fd.append('csrf_token', csrfEl ? csrfEl.value : '');
+
+    fetch('/api/upload_logo.php', { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) {
+          preview.src = data.url;
+          preview.style.display = 'block';
+          setStatus('success', '<?= addslashes(__('dash.logo_saved') ?: 'Logo uloženo!') ?>');
+        } else {
+          setStatus('error', data.error || 'Chyba při nahrávání');
+          // revert preview if we had no prior logo
+        }
+      })
+      .catch(function () {
+        setStatus('error', 'Síťová chyba – zkuste to znovu');
+      });
+  });
+
+  function setStatus(type, msg) {
+    status.style.display = 'block';
+    status.textContent   = msg;
+    if (type === 'success') {
+      status.style.color = '#10b981';
+    } else if (type === 'error') {
+      status.style.color = '#ef4444';
+    } else {
+      status.style.color = '#64748b';
+    }
+  }
+})();
+</script>
 
 <?php require __DIR__ . '/_layout_end.php'; ?>

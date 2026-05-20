@@ -3,7 +3,11 @@
 /* ============================================================
    PREVENT HORIZONTAL SCROLL ON ALL PAGES
    ============================================================ */
-html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+/* Prevent horizontal scroll without breaking iOS vertical scroll.
+   Setting overflow-x:hidden on BOTH html AND body causes iOS Safari to
+   lose its scroll container → page freezes. Only set on body. */
+html  { max-width: 100vw !important; overflow-x: hidden; }
+body  { overflow-x: hidden !important; overflow-y: auto; max-width: 100vw !important; }
 * { box-sizing: border-box; }
 
 /* ============================================================

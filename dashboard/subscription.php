@@ -87,7 +87,7 @@ require __DIR__ . '/_layout.php';
 </div>
 
 <!-- Plans -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+<div class="sub-plans-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
 
   <!-- Basic -->
   <div class="card pricing-card" style="padding:28px">
