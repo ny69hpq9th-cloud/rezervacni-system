@@ -55,13 +55,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p style='color:#6b7280;font-size:13px;margin-top:16px'>{$expires_}</p>
                     ");
 
-                    $sent = sendMail($email, __('email.reset_subject', ['name' => PLATFORM_NAME]), $body);
-                    error_log('[RESET] Email attempt for ' . $email . ' → ' . ($sent ? 'OK' : 'FAILED'));
+                    // ── DEBUG MODE: capture full PHPMailer SMTP transcript ────────────
+                    $debugLog  = '';
+                    $debugFile = __DIR__ . '/email_debug.txt';
 
-                    if (!$sent) {
-                        // Token is saved; warn about email failure in logs but still show success to user
-                        error_log('[RESET] sendMail() returned false for ' . $email);
+                    if (PHPMAILER_AVAILABLE) {
+                        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+                        $mail->SMTPDebug  = 3; // CLIENT + SERVER messages
+                        $mail->Debugoutput = function (string $str, int $level) use (&$debugLog): void {
+                            $debugLog .= '[L' . $level . '] ' . rtrim($str) . "\n";
+                        };
+                        try {
+                            $mail->isSMTP();
+                            $mail->Host       = SMTP_HOST;
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = SMTP_USER;
+                            $mail->Password   = SMTP_PASS;
+                            $mail->SMTPSecure = SMTP_SECURE;
+                            $mail->Port       = SMTP_PORT;
+                            $mail->CharSet    = 'UTF-8';
+                            $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
+                            $mail->addReplyTo(MAIL_FROM, MAIL_FROM_NAME);
+                            $mail->addAddress($email);
+                            $mail->isHTML(true);
+                            $mail->Subject = __('email.reset_subject', ['name' => PLATFORM_NAME]);
+                            $mail->Body    = $body;
+                            $mail->AltBody = strip_tags($body);
+                            $mail->send();
+                            $sent = true;
+                            $debugLog = "[SUCCESS] Email sent to {$email}\n\n[SMTP LOG]\n" . $debugLog;
+                        } catch (\Exception $e) {
+                            $sent = false;
+                            $debugLog = "[ERROR] " . $e->getMessage() . "\n\n[SMTP LOG]\n" . $debugLog;
+                        }
+                    } else {
+                        $debugLog = "[ERROR] PHPMailer files not found in includes/phpmailer/\n";
+                        $sent = false;
                     }
+
+                    $entry  = str_repeat('=', 60) . "\n";
+                    $entry .= date('Y-m-d H:i:s') . "  to={$email}\n";
+                    $entry .= "SMTP_HOST=" . SMTP_HOST . "  PORT=" . SMTP_PORT . "  SECURE=" . SMTP_SECURE . "\n";
+                    $entry .= "SMTP_USER=" . SMTP_USER . "  PHPMAILER=" . (PHPMAILER_AVAILABLE ? 'YES' : 'NO') . "\n";
+                    $entry .= $debugLog . "\n";
+                    file_put_contents($debugFile, $entry, FILE_APPEND | LOCK_EX);
+                    // ── END DEBUG ─────────────────────────────────────────────────────
+
+                    error_log('[RESET] Email ' . ($sent ? 'OK' : 'FAILED') . ' for ' . $email . ' — see email_debug.txt');
                 } catch (\Exception $e) {
                     // Likely missing DB columns — instruct admin to run migration
                     error_log('[RESET] DB error: ' . $e->getMessage() . ' — run ALTER TABLE to add reset_token columns');
@@ -72,8 +112,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log('[RESET] Reset requested for unknown/inactive email: ' . $email);
             }
 
-            // Always show "sent" so attackers cannot enumerate registered emails
-            if (empty($error)) $sent = true;
+            // In debug mode: show real error if sending failed, otherwise show "sent"
+            if (empty($error)) {
+                if (!$sent) {
+                    // Read last error from debug file and show it
+                    $debugFile = __DIR__ . '/email_debug.txt';
+                    $lastEntry = file_exists($debugFile) ? file_get_contents($debugFile) : '';
+                    $error = '⚠️ DEBUG: Odeslání selhalo. Obsah email_debug.txt:<br><pre style="font-size:.75rem;text-align:left;overflow:auto;max-height:300px;background:#f8fafc;padding:12px;border-radius:8px;margin-top:8px">'
+                           . htmlspecialchars(substr($lastEntry, -4000)) . '</pre>';
+                } else {
+                    $sent = true;
+                }
+            }
         }
     }
 }
