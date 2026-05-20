@@ -46,6 +46,8 @@ if (isset($_POST['install'])) {
           `stripe_subscription_id`  VARCHAR(255) DEFAULT NULL,
           `stripe_cancel_at`        DATETIME DEFAULT NULL,
           `payment_failed_at`       DATETIME DEFAULT NULL,
+          `reset_token`             VARCHAR(64) DEFAULT NULL,
+          `reset_token_expires`     DATETIME DEFAULT NULL,
           `plan`                ENUM('trial','basic','pro') DEFAULT 'trial',
           `status`              ENUM('active','suspended') DEFAULT 'active',
           `created_at`          DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -121,6 +123,9 @@ if (isset($_POST['install'])) {
         $migrations = [
             "ALTER TABLE `users` ADD COLUMN `payment_failed_at` DATETIME DEFAULT NULL",
             "ALTER TABLE `subscriptions` ADD COLUMN `stripe_invoice_id` VARCHAR(255) DEFAULT NULL",
+            // Password reset (2025-05)
+            "ALTER TABLE `users` ADD COLUMN `reset_token` VARCHAR(64) DEFAULT NULL",
+            "ALTER TABLE `users` ADD COLUMN `reset_token_expires` DATETIME DEFAULT NULL",
         ];
         foreach ($migrations as $sql) {
             try { $pdo->exec($sql); } catch (PDOException $e) { /* sloupec již existuje */ }
